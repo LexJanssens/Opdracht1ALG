@@ -10,6 +10,12 @@ using namespace std;
 const int MaxDimensie = 10;  // maximaal aantal rijen en maximaal aantal
                              // kolommen in een spel
 
+class Steen
+{
+	public:
+		int beschrijving[4];
+};
+
 class AapjeOmino
 { public:
     // Default constructor.
@@ -145,7 +151,9 @@ class AapjeOmino
     int hoogte, breedte,  // van het bord
         nrStenen,     // totaal aantal stenen in het spel
         aanBeurt;     // speler die aan de beurt is
-
+    Steen* stenen[MaxDimensie * MaxDimensie]; // maximale aantal kan hierboven zijn
+	  int stenenFemke[MaxDimensie * MaxDimensie]; 
+	  int stenenLieke[MaxDimensie * MaxDimensie]; 
 
 };
 
