@@ -31,7 +31,7 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 bool AapjeOmino::eindstand ()
 {
   // TODO: implementeer deze memberfunctie
-
+  //Hier komt de eindstand functie te staan
   return false;
 
 }  // eindstand
