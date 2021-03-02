@@ -14,16 +14,39 @@ AapjeOmino::AapjeOmino ()
 
 //*************************************************************************
 
-bool AapjeOmino::leesIn (const char* invoernaam)
-{
-  // TODO: implementeer deze memberfunctie
-  ifstream invoer (invoernaam, ios::in);
-  if (!invoer.is_open()){
-     cout<<"Kan file niet openen."<<endl;
-    return;
-  }
-  return true;
+bool AapjeOmino::leesIn (const char* invoernaam){
+	// TODO: implementeer deze memberfunctie
 
+	char letter;
+	int nummer = 0;
+
+	ifstream invoer (invoernaam, ios::in);
+
+	if (!invoer.is_open()){ // checkt of het bestand wel to openen is
+   	cout << "Kan file niet openen." << endl;
+   	return false;
+	}
+
+	letter = invoer.get();
+	cout << letter << endl;
+
+	// checkt groote bord
+	for (int i = 0; i < 2; i++){ // doe twee keer
+		while(letter != ' ' && letter != '\n'){
+			nummer = nummer * 10 + letter - '0';
+			letter = invoer.get();
+		}
+		if (nummer > MaxDimensie){
+			cout << "Het bord is te groot." << endl;
+			return false;
+		}
+		nummer = 0;
+		letter = invoer.get();
+	}
+
+	letter = invoer.get();
+
+	return true;
 }  // leesIn
 
 //*************************************************************************
