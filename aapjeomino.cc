@@ -3,6 +3,7 @@
 #include <iostream>
 #include "standaard.h"
 #include "aapjeomino.h"
+#include "fstream"
 
 //*************************************************************************
 
