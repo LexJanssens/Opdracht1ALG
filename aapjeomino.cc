@@ -17,7 +17,10 @@ AapjeOmino::AapjeOmino ()
 bool AapjeOmino::leesIn (const char* invoernaam)
 {
   // TODO: implementeer deze memberfunctie
-
+  if (!input.is_open()){
+    cout<<"Failed to open file"<<endl;
+    return;
+  }
   return true;
 
 }  // leesIn
