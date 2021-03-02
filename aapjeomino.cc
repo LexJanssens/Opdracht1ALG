@@ -16,36 +16,46 @@ AapjeOmino::AapjeOmino ()
 
 bool AapjeOmino::leesIn (const char* invoernaam){
 	// TODO: implementeer deze memberfunctie
-
-	char letter;
-	int nummer = 0;
+	int beginStenen, rijStartSteen, kolomStartSteen, getal;
 
 	ifstream invoer (invoernaam, ios::in);
 
-	if (!invoer.is_open()){ // checkt of het bestand wel to openen is
-   	cout << "Kan file niet openen." << endl;
-   	return false;
+	if (!invoer.is_open()) { // checkt of het bestand wel to openen is
+   		cout << "Kan file niet openen." << endl;
+   		return false;
 	}
 
-	letter = invoer.get();
-	cout << letter << endl;
-
-	// checkt groote bord
-	for (int i = 0; i < 2; i++){ // doe twee keer
-		while(letter != ' ' && letter != '\n'){
-			nummer = nummer * 10 + letter - '0';
-			letter = invoer.get();
-		}
-		if (nummer > MaxDimensie){
-			cout << "Het bord is te groot." << endl;
-			return false;
-		}
-		nummer = 0;
-		letter = invoer.get();
+	invoer >> hoogte;
+	invoer.get();
+	if (hoogte > MaxDimensie){
+		cout << "Het bord is te hoog." << endl;
+		return false;
 	}
 
-	letter = invoer.get();
+	invoer >> breedte;
+	invoer.get();
+	if (breedte > MaxDimensie){
+		cout << "Het bord is te breedt." << endl;
+		return false;
+	}
+	
+	invoer >> nrStenen;
+	invoer.get();
+	invoer >> beginStenen;
+	invoer.get();
+	if (nrStenen < beginStenen * 2 + 1) {
+		cout << "Er zijn te weinig stenen." << endl;
+		return false;
+	}
 
+	invoer >> rijStartSteen;
+	invoer.get();
+	invoer >> kolomStartSteen;
+	invoer.get();
+	if (rijStartSteen >= MaxDimensie || kolomStartSteen >= MaxDimensie) {
+		cout << "De startsteen ligt niet op het bord." << endl;
+		return false;
+	}
 	return true;
 }  // leesIn
 
