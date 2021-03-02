@@ -67,12 +67,6 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 		invoer.get();
 	}
 	
-	for (int i = 0; i < nrStenen; i++) {
-		for (int j = 0; j < 4; j++) {
-			cout << stenen[i]->beschrijving[j];
-		}
-		cout << endl;
-	}
 	invoer.close();
 	
 	return true;
