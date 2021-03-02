@@ -1,7 +1,7 @@
-6 6
-6 2
-3 3
-1 2 3 4
+6 6       (H, B)
+6 2       (stenen in het spel, beginstenen van elke speler)
+3 3       (x,y van de eerste steen (steen 0))
+1 2 3 4   (Alle stenen in het spel:)
 2 3 4 5
 3 4 5 6
 4 5 6 7
