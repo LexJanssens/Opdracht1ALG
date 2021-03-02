@@ -38,10 +38,31 @@ bool AapjeOmino::eindstand ()
 
 //*************************************************************************
 
+//n en m worden lengte en hoogte. N O Z W kunnen worden aangepast naar bord[i][j] uiteindelijk
 void AapjeOmino::drukAf()
-{
-  // TODO: implementeer deze memberfunctie
-
+{  
+   int n = 4;
+   int m = 3;
+   for (int i = 0; i < n; i++) {
+      cout << "      " << i;
+   }
+   cout << endl;
+   for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++)
+         cout << "      " << "N";
+      cout << endl;
+      for (int j = 0; j < n; j++) {
+         if (j == 0)
+            cout << i << "   " << "W" << "   " << "O";
+         else
+            cout << "  " << "W" << "   " << "O";
+      }
+      cout << endl;
+      for (int j = 0; j < n; j++)
+         cout << "      " << "Z";
+      cout << endl;
+      }
+   cout << endl;
 }  // drukAf
 
 //*************************************************************************
