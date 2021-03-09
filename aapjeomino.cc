@@ -68,6 +68,10 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 	     invoer.get();
 	     cout << endl;
 	}
+	
+	bord[rijStartSteen][kolomStartSteen].first = 0
+	bord[rijStartSteen][kolomStartSteen].second = 0
+		
 	invoer.close();
 
 	return true;
