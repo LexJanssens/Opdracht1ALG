@@ -142,19 +142,19 @@ class AapjeOmino
            int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
            int minGetal, int maxGetal);
 
-  private:
+    private:
     // TODO: uw eigen memberfuncties en -variabelen
 
       // alvast enkele membervariabelen
-    pair<int,int> bord[MaxDimensie][MaxDimensie];
+    pair<int*,int> bord[MaxDimensie][MaxDimensie];
               // in een pair kunnen we een steennummer en een rotatie opslaan
-    int hoogte, breedte,  // van het bord
+    int hoogte = 2, breedte = 3,  // van het bord
         nrStenen,     // totaal aantal stenen in het spel
         aanBeurt;     // speler die aan de beurt is
-    Steen* stenen[MaxDimensie * MaxDimensie]; // maximale aantal kan hierboven zijn
-	  int stenenFemke[MaxDimensie * MaxDimensie]; 
-	  int stenenLieke[MaxDimensie * MaxDimensie]; 
-
+      int stenen[MaxDimensie * MaxDimensie][4];
+      int stenenFemke[MaxDimensie * MaxDimensie];
+      int stenenLieke[MaxDimensie * MaxDimensie]; //AANTAL STENEN PER PERSOON
+      int pot[MaxDimensie * MaxDimensie];
 };
 
 #endif
