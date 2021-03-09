@@ -101,7 +101,7 @@ bool AapjeOmino::eindstand ()
    while (stenenLieke[i] != -1) //hoeveelheid stenen Lieke
       i++;
    while (stenenFemke[j] != -1) //hoeveelheid stenen Femke
-      j++
+      j++;
 
    cout << "Score Femke: " << j-i << endl; //Femke-Lieke
    cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
