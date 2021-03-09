@@ -129,8 +129,20 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 
 int AapjeOmino::haalSteenUitPot ()
 {
-  // TODO: implementeer deze memberfunctie
-
+   int i = 0; 
+   if (aanBeurt) {
+      while (stenenLieke[i] != -1) {
+         i++;
+      }
+      stenenLieke[i] = pot;
+      pot++;
+   } else {
+      while (stenenLieke[i] != -1) {
+         i++;
+      }
+      stenenLieke[i] = pot;
+      pot++;
+   }
   return 0;
 
 }  // haalSteenUitPot
