@@ -154,7 +154,7 @@ class AapjeOmino
       int stenen[MaxDimensie * MaxDimensie][4];
       int stenenFemke[MaxDimensie * MaxDimensie];
       int stenenLieke[MaxDimensie * MaxDimensie]; //AANTAL STENEN PER PERSOON
-      int pot[MaxDimensie * MaxDimensie];
+      int pot = 1;
 };
 
 #endif
