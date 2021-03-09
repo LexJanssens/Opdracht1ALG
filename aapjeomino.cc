@@ -53,7 +53,7 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 	invoer.get();
 	invoer >> kolomStartSteen;
 	invoer.get();
-	if (rijStartSteen >= MaxDimensie || kolomStartSteen >= MaxDimensie) {
+	if (rijStartSteen >= MaxDimensie || kolomStartSteen >= MaxDimensie || rijStartSteen < 0 || kolomStartSteen < 0) {
 		cout << "De startsteen ligt niet op het bord." << endl;
 		return false;
 	}
