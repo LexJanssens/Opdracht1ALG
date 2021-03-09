@@ -17,13 +17,13 @@ AapjeOmino::AapjeOmino ()
 
 bool AapjeOmino::leesIn (const char* invoernaam){
 	// TODO: implementeer deze memberfunctie
-	int beginStenen, rijStartSteen, kolomStartSteen, getal;
+	int beginStenen, rijStartSteen, kolomStartSteen, getal, steen[4];
 
 	ifstream invoer (invoernaam, ios::in);
 
 	if (!invoer.is_open()) { // checkt of het bestand wel to openen is
-   		cout << "Kan file niet openen." << endl;
-   		return false;
+      cout << "Kan file niet openen." << endl;
+      return false;
 	}
 
 	invoer >> hoogte;
@@ -39,7 +39,7 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 		cout << "Het bord is te breedt." << endl;
 		return false;
 	}
-	
+
 	invoer >> nrStenen;
 	invoer.get();
 	invoer >> beginStenen;
@@ -59,26 +59,30 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 	}
 
 	for (int i = 0; i < nrStenen; i++) {
-             pot[i] = i;
-	     for (int j = 0; j < 4; j++) {
-		invoer >> getal;
-		stenen[i][j] = getal;
-	     }
-	     invoer.get();
+      pot[i] = i;
+		for (int j = 0; j < 4; j++) {
+			invoer >> getal;
+			stenen[i][j] = getal;
+		}
+		invoer.get();
 	}
-	
-	bord[rijStartSteen][kolomStartSteen].first = 0
-	bord[rijStartSteen][kolomStartSteen].second = 0
-		
+	//Bord op -1, zodat er geen stenen zijn.
+   for (int i = 0; i < MaxDimensie; i++) {
+      for (int j = 0; j < MaxDimensie; j++) {
+         bord[i][j].first = -1;
+         bord[i][j].first = -1;
+      }
+   }
+	bord[rijStartSteen][kolomStartSteen].first = 0; //steennr
+	bord[rijStartSteen][kolomStartSteen].second = 0; //rotatie
+
+	invoer.close();
 	for (int i = 0; i < beginStenen; i++) {
 		haalSteenUitPot();
 		wisselSpeler();
 		haalSteenUitPot();
 		wisselSpeler();
 	}
-		
-	invoer.close();
-
 	return true;
 }  // leesIn
 
@@ -174,8 +178,7 @@ int AapjeOmino::haalSteenUitPot ()
 
 void AapjeOmino::wisselSpeler ()
 {
-  // TODO: implementeer deze memberfunctie
-
+  aanBeurt = 1-aanBeurt;
 }  // wisselSpeler
 
 //*************************************************************************
