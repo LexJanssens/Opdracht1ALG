@@ -145,7 +145,7 @@ class AapjeOmino
 	// in een pair kunnen we een steennummer en een rotatie opslaan
 	int hoogte, breedte,  // van het bord
 		nrStenen, // totaal aantal stenen in het spel
-		aanBeurt; // speler die aan de beurt is
+		aanBeurt = 0; // speler die aan de beurt is FEMKE
 	
 	int stenenFemke[MaxDimensie * MaxDimensie];
 	int stenenLieke[MaxDimensie * MaxDimensie];
