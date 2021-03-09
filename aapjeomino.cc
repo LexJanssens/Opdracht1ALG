@@ -70,6 +70,13 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 	bord[rijStartSteen][kolomStartSteen].first = 0
 	bord[rijStartSteen][kolomStartSteen].second = 0
 		
+	for (int i = 0; i < beginStenen; i++) {
+		haalSteenUitPot();
+		wisselSpeler();
+		haalSteenUitPot();
+		wisselSpeler();
+	}
+		
 	invoer.close();
 
 	return true;
