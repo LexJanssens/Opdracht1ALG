@@ -57,18 +57,19 @@ bool AapjeOmino::leesIn (const char* invoernaam){
 		cout << "De startsteen ligt niet op het bord." << endl;
 		return false;
 	}
-	
+
 	for (int i = 0; i < nrStenen; i++) {
-		stenen[i] = new Steen;
-		for (int j = 0; j < 4; j++) {
-			invoer >> getal;
-			stenen[i]->beschrijving[j] = getal;
-		}
-		invoer.get();
+             pot[i] = i;
+	     for (int j = 0; j < 4; j++) {
+		invoer >> getal;
+		stenen[i][j] = getal;
+		cout << stenen[i][j];
+	     }
+	     invoer.get();
+	     cout << endl;
 	}
-	
 	invoer.close();
-	
+
 	return true;
 }  // leesIn
 
