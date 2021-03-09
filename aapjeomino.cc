@@ -97,18 +97,36 @@ void AapjeOmino::drukAf()
    }
    cout << endl;
    for (int i = 0; i < hoogte; i++) {
-      for (int j = 0; j < breedte; j++)
-         cout << "      " << "N";
-      cout << endl;
       for (int j = 0; j < breedte; j++) {
-         if (j == 0)
-            cout << i << "   " << "W" << "   " << "O";
+         cout << "      ";
+         if (bord[i][j].first == -1)
+            cout << "-";
          else
-            cout << "  " << "W" << "   " << "O";
+            cout << stenen[bord[i][j].first][0];
       }
       cout << endl;
-      for (int j = 0; j < breedte; j++)
-         cout << "      " << "Z";
+      for (int j = 0; j < breedte; j++) {
+         if (j == 0) {
+            if (bord[i][j].first == -1)
+               cout << i << "   " << "-" << "   " << "-";
+            else
+               cout << i << "   " << stenen[bord[i][j].first][(3+bord[i][j].second)%4] << "   " << stenen[bord[i][j].first][(1+bord[i][j].second)%4];
+         }
+         else {
+            if (bord[i][j].first == -1)
+               cout << "  " << "-" << "   " << "-";
+            else
+               cout << "  " << stenen[bord[i][j].first][(3+bord[i][j].second)%4] << "   " << stenen[bord[i][j].first][(1+bord[i][j].second)%4];
+         }
+      }
+      cout << endl;
+      for (int j = 0; j < breedte; j++) {
+         cout << "      ";
+         if (bord[i][j].first == -1)
+            cout << "-";
+         else
+            cout << stenen[bord[i][j].first][(2+bord[i][j].second)%4];
+      }
       cout << endl;
       }
    cout << endl;
