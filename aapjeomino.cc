@@ -97,10 +97,15 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 
 bool AapjeOmino::eindstand ()
 {
-// TODO: implementeer deze memberfunctie
+   int i = 0, j = 0;
+   while (stenenLieke[i] != -1) //hoeveelheid stenen Lieke
+      i++;
+   while (stenenFemke[j] != -1) //hoeveelheid stenen Femke
+      j++
 
-return false;
-
+   cout << "Score Femke: " << j-i << endl; //Femke-Lieke
+   cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
+   return false;
 }  // eindstand
 
 //*************************************************************************
