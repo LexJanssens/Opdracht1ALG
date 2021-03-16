@@ -93,13 +93,11 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 
 bool AapjeOmino::eindstand ()
 {
-	int i,j;
-	for (i=0; stenenLieke[i] != -1; i++); //hoeveelheid stenen Lieke
-	for (j=0; stenenFemke[j] != -1; j++); //hoeveelheid stenen Femke
+	int i = stenenLieke.size(), j = stenenFemke.size();
 
-        if (((i == 0 || j == 0) && pot == nrStenen)) /*OF I aan de beurt en kan niet zetten OF J aan de beurt en kan niet zetten*/  {
-      		cout << "Score Femke: " << j-i << endl; //Femke-Lieke
-      		cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
+   	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) && pot == nrStenen) {
+      	cout << "Score Femke: " << j-i << endl; //Femke-Lieke
+      	cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
       	return true;
    	}
 	return false;
@@ -146,6 +144,32 @@ void AapjeOmino::drukAf()
 		cout << endl;
 	}
 	cout << endl;
+	
+	//stenen:
+	cout << "Stenen pot: ";
+	for (int i = pot; i < nrStenen; i++) {
+      for (int j = 0; j < 4; j++)
+         cout << stenen[i][j] << ",";
+      cout << "  ";
+	}
+	cout << endl << "Femke: ";
+	for (int i = 0; i < stenenFemke.size()-1; i++) {
+      for (int j = 0; j < 4; j++)
+         cout << stenen[stenenFemke[i]][j] << ",";
+      cout << "  ";
+	}
+	cout << endl << "Lieke: ";
+	for (int i = 0; i < stenenLieke.size()-1; i++) {
+      for (int j = 0; j < 4; j++)
+         cout << stenen[stenenLieke[i]][j] << ",";
+      cout << "  ";
+	}
+	cout << endl;
+	if (aanBeurt)
+      cout << "Lieke is aan de beurt" << endl;
+   	else
+      cout << "Femke is aan de beurt" << endl;
+	
 }  // drukAf
 
 //*************************************************************************
