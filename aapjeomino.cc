@@ -28,13 +28,13 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 
 	invoer >> hoogte;
 	invoer.get();
-	if (!integerInBereik ("Hoogte", hoogte, 1, 10)) {
+	if (!integerInBereik ("Hoogte", hoogte, 1, MaxDimensie)) {
 		return false;
 	}
 
 	invoer >> breedte;
 	invoer.get();
-	if (!integerInBereik ("Breedte", breedte, 1, 10)) {
+	if (!integerInBereik ("Breedte", breedte, 1, MaxDimensie)) {
 		return false;
 	}
 
@@ -148,9 +148,9 @@ void AapjeOmino::drukAf()
 	}
 	cout << endl;
 
-		cout << "Stenen pot: ";
+	//stenen:
+	cout << "Stenen pot: ";
 	for (int i = pot; i < nrStenen; i++) {
-      cout << i << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[i][j] << ",";
       cout << "  ";
@@ -158,7 +158,6 @@ void AapjeOmino::drukAf()
 	cout << endl << "Femke: ";
 
 	for (int i = 0; i < k; i++) {
-      cout << stenenFemke[i] << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenFemke[i]][j] << ",";
       cout << "  ";
@@ -166,13 +165,11 @@ void AapjeOmino::drukAf()
 	cout << endl << "Lieke: ";
 
 	for (int i = 0; i < l; i++) {
-      cout << stenenLieke[i] << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenLieke[i]][j] << ",";
       cout << "  ";
 	}
 	cout << endl;
-	
 	if (aanBeurt)
       cout << "Lieke is aan de beurt" << endl;
    else
@@ -184,12 +181,10 @@ void AapjeOmino::drukAf()
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 { vector<Zet> zetten;
    Zet mogelijkeZet;
-   int s;
    if (aanBeurt) {
-      s = stenenLieke.size();
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
-            for (int k = 0; k < s; k++) {
+            for (int k = 0; k < stenenLieke.size(); k++) {
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -203,7 +198,7 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
                          bord[i][j-1].first == -1)) &&
                          (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenLieke[k]][(1+l)%4] ||
                          bord[i][j+1].first == -1))) {
-                            mogelijkeZet.setWaardes(stenenLieke[k], (l)%4, i, j);
+                            mogelijkeZet.setWaardes(stenenLieke[k], (l+2)%4, i, j);
                             zetten.push_back(mogelijkeZet);
                      }
                   }
@@ -213,10 +208,9 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
       }
    }
    else {
-      s = stenenFemke.size();
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
-            for (int k = 0; k < s; k++) {
+            for (int k = 0; k < stenenFemke.size(); k++) {
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -230,7 +224,7 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
                          bord[i][j-1].first == -1)) &&
                          (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenFemke[k]][(1+l)%4] ||
                          bord[i][j+1].first == -1))) {
-                            mogelijkeZet.setWaardes(stenenFemke[k], (l)%4, i, j);
+                            mogelijkeZet.setWaardes(stenenFemke[k], (l+2)%4, i, j);
                             zetten.push_back(mogelijkeZet);
                      }
                   }
@@ -246,11 +240,27 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 
 int AapjeOmino::haalSteenUitPot ()
 {
+	actie = 2;
+	if (pot >= nrStenen) {
+		cout << "De pot is leeg." << endl;
+		return -1;
+	}
+
+	if (bepaalMogelijkeZetten().size() > 0) {
+		cout << "Er kan nog een steen worden aangelegd." << endl;
+		return -1;
+	}
+
+	if (actie != 0) {
+		cout << "Je hebt al een actie gedaan." << endl;
+		return -1;
+	}
+
 	if (aanBeurt)
 		stenenLieke.push_back(pot);
 	else
 		stenenFemke.push_back(pot);
-   pot++;
+   	pot++;
 	return 0;
 }  // haalSteenUitPot
 
@@ -258,6 +268,7 @@ int AapjeOmino::haalSteenUitPot ()
 
 void AapjeOmino::wisselSpeler ()
 {
+	actie = 0;
 	aanBeurt = 1 - aanBeurt;
 }  // wisselSpeler
 
@@ -340,28 +351,29 @@ bool AapjeOmino::doeZet (Zet zet)
 
 vector<Zet> AapjeOmino::bepaalGoedeZetten ()
 {
-   vector<Zet> zetten = bepaalMogelijkeZetten();
-   int sizeZetten = zetten.size();
-   int buren[sizeZetten]; //buren waarbij het kan aansluiten, al bepaald, dus alleen maar tellen.
-   int beste = 1; //maximale hoeveelheid buren van een steen in zetten
+	vector<Zet> zetten;
+	vector<Zet> zetten = bepaalMogelijkeZetten();
+	int sizeZetten = zetten.size();
+	int buren[sizeZetten]; //buren waarbij het kan aansluiten, al bepaald, dus alleen maar tellen.
+	int beste = 1; //maximale hoeveelheid buren van een steen in zetten
 	for (int i = 0; i < sizeZetten; i++) {
-      buren[i] = 0;
-      if (zetten[i].getRij()-1 >= 0 && bord[zetten[i].getRij()-1][zetten[i].getKolom()].first != -1)
-         buren[i]++;
-      if (zetten[i].getRij()+1 < hoogte && bord[zetten[i].getRij()+1][zetten[i].getKolom()].first != -1)
-         buren[i]++;
-      if (zetten[i].getKolom()-1 >= 0 && bord[zetten[i].getRij()][zetten[i].getKolom()-1].first != -1)
-         buren[i]++;
-      if (zetten[i].getKolom()+1 < breedte && bord[zetten[i].getRij()][zetten[i].getKolom()+1].first != -1)
-         buren[i]++;
-      if (buren[i] > beste)
-         beste = buren[i];
+		buren[i] = 0;
+		if (zetten[i].getRij()-1 >= 0 && bord[zetten[i].getRij()-1][zetten[i].getKolom()].first != -1)
+			buren[i]++;
+		if (zetten[i].getRij()+1 < hoogte && bord[zetten[i].getRij()+1][zetten[i].getKolom()].first != -1)
+			buren[i]++;
+		if (zetten[i].getKolom()-1 >= 0 && bord[zetten[i].getRij()][zetten[i].getKolom()-1].first != -1)
+			buren[i]++;
+		if (zetten[i].getKolom()+1 < breedte && bord[zetten[i].getRij()][zetten[i].getKolom()+1].first != -1)
+			buren[i]++;
+		if (buren[i] > beste)
+			beste = buren[i];
 	}
-   //haal alle stenen eruit met minder buren dan 'beste'
+	//haal alle stenen eruit met minder buren dan 'beste'
 	for (int i = sizeZetten-1; i >= 0; i--) {
-      cout << buren[i] << endl;
-      if (buren[i] < beste)
-         zetten.erase(zetten.begin() + i);
+		cout << buren[i] << endl;
+		if (buren[i] < beste)
+			zetten.erase(zetten.begin() + i);
 	}
 
 	return zetten;
