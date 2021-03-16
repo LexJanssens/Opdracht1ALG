@@ -184,10 +184,12 @@ void AapjeOmino::drukAf()
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 { vector<Zet> zetten;
    Zet mogelijkeZet;
+int s;
    if (aanBeurt) {
+      s = stenenLieke.size();
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
-            for (int k = 0; k < stenenLieke.size(); k++) {
+            for (int k = 0; k < s; k++) {
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -201,7 +203,7 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
                          bord[i][j-1].first == -1)) &&
                          (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenLieke[k]][(1+l)%4] ||
                          bord[i][j+1].first == -1))) {
-                            mogelijkeZet.setWaardes(stenenLieke[k], (l+2)%4, i, j);
+                            mogelijkeZet.setWaardes(stenenLieke[k], (l)%4, i, j);
                             zetten.push_back(mogelijkeZet);
                      }
                   }
@@ -211,9 +213,10 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
       }
    }
    else {
+      s = stenenFemke.size();
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
-            for (int k = 0; k < stenenFemke.size(); k++) {
+            for (int k = 0; k < s; k++) {
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -227,7 +230,7 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
                          bord[i][j-1].first == -1)) &&
                          (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenFemke[k]][(1+l)%4] ||
                          bord[i][j+1].first == -1))) {
-                            mogelijkeZet.setWaardes(stenenFemke[k], (l+2)%4, i, j);
+                            mogelijkeZet.setWaardes(stenenFemke[k], (l)%4, i, j);
                             zetten.push_back(mogelijkeZet);
                      }
                   }
