@@ -81,7 +81,11 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 
 	//verdelen van de beginstenen aan de spelers
 	for (int i = 0; i < beginStenen * 2; i++) {
-		haalSteenUitPot();
+		if (aanBeurt)
+			stenenLieke.push_back(pot);
+		else
+			stenenFemke.push_back(pot);
+   		pot++;
 		wisselSpeler();
 	}
 
@@ -246,7 +250,6 @@ int s;
 
 int AapjeOmino::haalSteenUitPot ()
 {
-	actie = 2;
 	if (pot >= nrStenen) {
 		cout << "De pot is leeg." << endl;
 		return -1;
@@ -267,6 +270,7 @@ int AapjeOmino::haalSteenUitPot ()
 	else
 		stenenFemke.push_back(pot);
    	pot++;
+	actie = 2;
 	return 0;
 }  // haalSteenUitPot
 
@@ -357,7 +361,6 @@ bool AapjeOmino::doeZet (Zet zet)
 
 vector<Zet> AapjeOmino::bepaalGoedeZetten ()
 {
-	vector<Zet> zetten;
 	vector<Zet> zetten = bepaalMogelijkeZetten();
 	int sizeZetten = zetten.size();
 	int buren[sizeZetten]; //buren waarbij het kan aansluiten, al bepaald, dus alleen maar tellen.
