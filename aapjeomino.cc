@@ -100,9 +100,8 @@ bool AapjeOmino::eindstand ()
 {
 	int i = stenenLieke.size(), j = stenenFemke.size();
 
-	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) && pot == nrStenen) {
-		cout << "Score Femke: " << j-i << endl; //Femke-Lieke
-		cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
+	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) &&
+      	(pot == nrStenen && bepaalMogelijkeZetten)) {
 		return true;
 	}
 	return false;
@@ -181,6 +180,10 @@ void AapjeOmino::drukAf()
       cout << "Lieke is aan de beurt" << endl;
    else
       cout << "Femke is aan de beurt" << endl;
+	if (eindstand()) {
+      cout << "Score Femke: " << stenenLieke.size()-stenenFemke.size() << endl; //Femke-Lieke
+      cout << "Score Lieke: " << stenenFemke.size()-stenenLieke.size()  << endl; //Lieke-Femke
+   }
 }  // drukAf
 
 //*************************************************************************
