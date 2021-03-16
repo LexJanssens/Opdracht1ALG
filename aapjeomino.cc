@@ -290,22 +290,22 @@ bool AapjeOmino::doeZet (Zet zet)
 	}
 	
 	if ((rij-1 >= 0 && bord[rij-1][kolom].first != -1) ||
-        (rij+1 < hoogte && bord[rij+1][kolom].first != -1) ||
-    	(kolom-1 >= 0 && bord[rij][kolom-1].first != -1) ||
-        (kolom+1 < breedte && bord[rij][kolom+1].first != -1)) {
+		(rij+1 < hoogte && bord[rij+1][kolom].first != -1) ||
+		(kolom-1 >= 0 && bord[rij][kolom-1].first != -1) ||
+		(kolom+1 < breedte && bord[rij][kolom+1].first != -1)) {
 		cout << "Deze plek heeft geen aanliggende steen." << endl;
 		return false;
 	}
 	
 	if (!(
 		(rij-1 <= 0 || bord[rij-1][kolom].first != -1 || 
-		stenen[i][r] = stenen[bord[rij-1][kolom].first][(r+2)%4]) && // checkt boven
+		stenen[i][r] == stenen[bord[rij-1][kolom].first][(r+2)%4]) && // checkt boven
 		(kolom+1 < breedte || bord[rij][kolom+1].first != -1 || 
-		stenen[i][(r+1)%4] = stenen[bord[rij][kolom+1].first][(r+3)%4]) && // checkt rechts
-        (rij+1 < hoogte || bord[rij+1][kolom].first != -1 || 
-		stenen[i][(r+2)%4] = stenen[bord[rij+1][kolom].first][r]) && // checkt onder
-    	(kolom-1 >= 0 && bord[rij][kolom-1].first != -1 ||
-		stenen[i][(r+3)%4] = stenen[bord[rij][kolom-1].first][(r+1)%4])) { // checkt links
+		stenen[i][(r+1)%4] == stenen[bord[rij][kolom+1].first][(r+3)%4]) && // checkt rechts
+		(rij+1 < hoogte || bord[rij+1][kolom].first != -1 || 
+		stenen[i][(r+2)%4] == stenen[bord[rij+1][kolom].first][r]) && // checkt onder
+		(kolom-1 >= 0 || bord[rij][kolom-1].first != -1 ||
+		stenen[i][(r+3)%4] == stenen[bord[rij][kolom-1].first][(r+1)%4]))) { // checkt links
 		cout << "Deze steen past niet." << endl;
 		return false;
 	}
@@ -315,24 +315,25 @@ bool AapjeOmino::doeZet (Zet zet)
 	if (!aanBeurt) {
 		size = stenenFemke.size();
 		for (int j = 0; j < size; j++) {
-			if (stenenFemke[j] = i) {
-				stenenFemke.erase(j)
+			if (stenenFemke[j] == i) {
+				stenenFemke.erase(stenenFemke.begin()+j);
 				break;
-			} 
+			}
 			cout << "Femke heeft deze steen niet in haar hand." << endl;
 			return false;
 		}
 	} else {
 		size = stenenLieke.size();
 		for (int j = 0; j < size; j++) {
-			if (stenenLieke[j] = i) {
-				stenenLieke.erase(j);
+			if (stenenLieke[j] == i) {
+				stenenLieke.erase(stenenLieke.begin()+j);
 				break;
 			} 
 			cout << "Lieke heeft deze steen niet in haar hand." << endl;
 			return false;
 		}		
 	}
+	return true;
 }  // doeZet
 
 //*************************************************************************
