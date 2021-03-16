@@ -269,9 +269,29 @@ bool AapjeOmino::doeZet (Zet zet)
 
 vector<Zet> AapjeOmino::bepaalGoedeZetten ()
 {
-	vector<Zet> zetten;
-
-	// TODO: implementeer deze memberfunctie
+   vector<Zet> zetten = bepaalMogelijkeZetten();
+   int sizeZetten = zetten.size();
+   int buren[sizeZetten]; //buren waarbij het kan aansluiten, al bepaald, dus alleen maar tellen.
+   int beste = 1; //maximale hoeveelheid buren van een steen in zetten
+	for (int i = 0; i < sizeZetten; i++) {
+      buren[i] = 0;
+      if (zetten[i].getRij()-1 >= 0 && bord[zetten[i].getRij()-1][zetten[i].getKolom()].first != -1)
+         buren[i]++;
+      if (zetten[i].getRij()+1 < hoogte && bord[zetten[i].getRij()+1][zetten[i].getKolom()].first != -1)
+         buren[i]++;
+      if (zetten[i].getKolom()-1 >= 0 && bord[zetten[i].getRij()][zetten[i].getKolom()-1].first != -1)
+         buren[i]++;
+      if (zetten[i].getKolom()+1 < breedte && bord[zetten[i].getRij()][zetten[i].getKolom()+1].first != -1)
+         buren[i]++;
+      if (buren[i] > beste)
+         beste = buren[i];
+	}
+   //haal alle stenen eruit met minder buren dan 'beste'
+	for (int i = sizeZetten-1; i >= 0; i--) {
+      cout << buren[i] << endl;
+      if (buren[i] < beste)
+         zetten.erase(zetten.begin() + i);
+	}
 
 	return zetten;
 }  // bepaalGoedeZetten
