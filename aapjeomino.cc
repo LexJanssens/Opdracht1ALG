@@ -163,13 +163,11 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 
 int AapjeOmino::haalSteenUitPot ()
 {
-	if (aanBeurt) {
+	if (aanBeurt) 
 		stenenLieke.push_back(pot);
-		pot++;
-	} else {
+	else 
 		stenenFemke.push_back(pot);
-		pot++;
-	}
+	pot++;
 	return 0;
 }  // haalSteenUitPot
 
