@@ -176,10 +176,63 @@ void AapjeOmino::drukAf()
 
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 { vector<Zet> zetten;
-
-	// TODO: implementeer deze memberfunctie
-
-	return zetten;
+bool mogelijk;
+   Zet mogelijkeZet;
+   if (aanBeurt) {
+      for (int i = 0; i < hoogte; i++) {
+         for (int j = 0; j < breedte; j++) {
+            for (int k = 0; k < stenenLieke.size(); k++) {
+               mogelijk = true;
+               if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
+                   (i+1 < hoogte && bord[i+1][j].first != -1) ||
+                   (j-1 >= 0 && bord[i][j-1].first != -1) ||
+                   (j+1 < breedte && bord[i][j+1].first != -1)) {
+                  for (int l = 0; l < 4; l++) {
+                     if ((i-1 >= 0 && (stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4] == stenen[stenenLieke[k]][(0+l)%4] ||
+                         bord[i-1][j].first == -1)) &&
+                         (i+1 < hoogte && (stenen[bord[i+1][j].first][(0+bord[i+1][j].second)%4] == stenen[stenenLieke[k]][(2+l)%4] ||
+                         bord[i+1][j].first == -1)) &&
+                         (j-1 >= 0 && (stenen[bord[i][j-1].first][(1+bord[i][j-1].second)%4] == stenen[stenenLieke[k]][(3+l)%4] ||
+                         bord[i][j-1].first == -1)) &&
+                         (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenLieke[k]][(1+l)%4] ||
+                         bord[i][j+1].first == -1))) {
+                            mogelijkeZet.setWaardes(stenenLieke[k], (l+2)%4, i, j);
+                            zetten.push_back(mogelijkeZet);
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+   else {
+      for (int i = 0; i < hoogte; i++) {
+         for (int j = 0; j < breedte; j++) {
+            for (int k = 0; k < stenenFemke.size(); k++) {
+               mogelijk = true;
+               if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
+                   (i+1 < hoogte && bord[i+1][j].first != -1) ||
+                   (j-1 >= 0 && bord[i][j-1].first != -1) ||
+                   (j+1 < breedte && bord[i][j+1].first != -1)) {
+                  for (int l = 0; l < 4; l++) {
+                     if ((i-1 >= 0 && (stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4] == stenen[stenenFemke[k]][(0+l)%4] ||
+                         bord[i-1][j].first == -1)) &&
+                         (i+1 < hoogte && (stenen[bord[i+1][j].first][(0+bord[i+1][j].second)%4] == stenen[stenenFemke[k]][(2+l)%4] ||
+                         bord[i+1][j].first == -1)) &&
+                         (j-1 >= 0 && (stenen[bord[i][j-1].first][(1+bord[i][j-1].second)%4] == stenen[stenenFemke[k]][(3+l)%4] ||
+                         bord[i][j-1].first == -1)) &&
+                         (j+1 < breedte && (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4] == stenen[stenenFemke[k]][(1+l)%4] ||
+                         bord[i][j+1].first == -1))) {
+                            mogelijkeZet.setWaardes(stenenFemke[k], (l+2)%4, i, j);
+                            zetten.push_back(mogelijkeZet);
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+return zetten;
 
 }  // bepaalMogelijkeZetten
 
