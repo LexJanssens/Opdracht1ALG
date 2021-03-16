@@ -147,8 +147,8 @@ class AapjeOmino
 		nrStenen, // totaal aantal stenen in het spel
 		aanBeurt = 0; // speler die aan de beurt is FEMKE
 	
-	int stenenFemke[MaxDimensie * MaxDimensie];
-	int stenenLieke[MaxDimensie * MaxDimensie];
+	vector <int> stenenFemke;
+	vector <int> stenenLieke;
 	int pot = 1;
 	int stenen[MaxDimensie][4]; // maximale aantal kan hierboven zijn
 };
