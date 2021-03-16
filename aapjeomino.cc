@@ -18,6 +18,7 @@ AapjeOmino::AapjeOmino ()
 bool AapjeOmino::leesIn (const char* invoernaam)
 {
 	int beginStenen, rijStartSteen, kolomStartSteen, getal;
+
 	ifstream invoer (invoernaam, ios::in);
 
 	if (!invoer.is_open()) { // checkt of het bestand wel to openen is
@@ -51,7 +52,7 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 	invoer >> kolomStartSteen;
 	invoer.get();
 	if (!integerInBereik("rijStartSteen", rijStartSteen, 1, breedte) ||
-        !integerInBereik("kolomStartSteen", kolomStartSteen, 1, hoogte)) {
+      !integerInBereik("kolomStartSteen", kolomStartSteen, 1, hoogte)) {
 		cout << "De startsteen ligt niet op het bord." << endl;
 		return false;
 	}
@@ -67,8 +68,6 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 	// stopt de stenen in de index lijst
 	// en initialiseert
 	for (int i = 0; i < nrStenen; i++) {
-		stenenFemke[i] = -1;
-		stenenLieke[i] = -1;
 		for (int j = 0; j < 4; j++) {
 			invoer >> getal;
 			stenen[i][j] = getal;
@@ -85,7 +84,9 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 		haalSteenUitPot();
 		wisselSpeler();
 	}
+
 	invoer.close();
+
 	return true;
 }	// leesIn
 
@@ -95,11 +96,11 @@ bool AapjeOmino::eindstand ()
 {
 	int i = stenenLieke.size(), j = stenenFemke.size();
 
-   	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) && pot == nrStenen) {
-      	cout << "Score Femke: " << j-i << endl; //Femke-Lieke
-      	cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
-      	return true;
-   	}
+   if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) && pot == nrStenen) {
+      cout << "Score Femke: " << j-i << endl; //Femke-Lieke
+      cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
+      return true;
+   }
 	return false;
 }  // eindstand
 
@@ -107,6 +108,8 @@ bool AapjeOmino::eindstand ()
 
 void AapjeOmino::drukAf()
 {
+   int k = stenenFemke.size();
+   int l = stenenLieke.size();
 	for (int i = 0; i < breedte; i++) {
 		cout << "      " << i;
 	}
@@ -144,7 +147,7 @@ void AapjeOmino::drukAf()
 		cout << endl;
 	}
 	cout << endl;
-	
+
 	//stenen:
 	cout << "Stenen pot: ";
 	for (int i = pot; i < nrStenen; i++) {
@@ -153,13 +156,15 @@ void AapjeOmino::drukAf()
       cout << "  ";
 	}
 	cout << endl << "Femke: ";
-	for (int i = 0; i < stenenFemke.size()-1; i++) {
+
+	for (int i = 0; i < k; i++) {
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenFemke[i]][j] << ",";
       cout << "  ";
 	}
 	cout << endl << "Lieke: ";
-	for (int i = 0; i < stenenLieke.size()-1; i++) {
+
+	for (int i = 0; i < l; i++) {
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenLieke[i]][j] << ",";
       cout << "  ";
@@ -167,22 +172,19 @@ void AapjeOmino::drukAf()
 	cout << endl;
 	if (aanBeurt)
       cout << "Lieke is aan de beurt" << endl;
-   	else
+   else
       cout << "Femke is aan de beurt" << endl;
-	
 }  // drukAf
 
 //*************************************************************************
 
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 { vector<Zet> zetten;
-bool mogelijk;
    Zet mogelijkeZet;
    if (aanBeurt) {
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
             for (int k = 0; k < stenenLieke.size(); k++) {
-               mogelijk = true;
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -209,7 +211,6 @@ bool mogelijk;
       for (int i = 0; i < hoogte; i++) {
          for (int j = 0; j < breedte; j++) {
             for (int k = 0; k < stenenFemke.size(); k++) {
-               mogelijk = true;
                if ((i-1 >= 0 && bord[i-1][j].first != -1) ||
                    (i+1 < hoogte && bord[i+1][j].first != -1) ||
                    (j-1 >= 0 && bord[i][j-1].first != -1) ||
@@ -232,34 +233,19 @@ bool mogelijk;
          }
       }
    }
-return zetten;
-
+	return zetten;
 }  // bepaalMogelijkeZetten
 
 //*************************************************************************
 
 int AapjeOmino::haalSteenUitPot ()
 {
-	if (pot >= nrStenen) {
-		cout << "De pot is leeg." << endl;
-		return -1;
-	}
-
-	if (bepaalMogelijkeZetten().size() > 0) {
-		cout << "Er kan nog een steen worden aangelegd." << endl;
-		return -1;
-	}
-
-	if (actie != 0) {
-		cout << "Je hebt al een actie gedaan." << endl;
-		return -1;
-	}
-	if (aanBeurt) 
+	if (aanBeurt)
 		stenenLieke.push_back(pot);
-	else 
+	else
 		stenenFemke.push_back(pot);
-	pot++;
-	return pot - 1;
+   pot++;
+	return 0;
 }  // haalSteenUitPot
 
 //*************************************************************************
@@ -282,7 +268,7 @@ bool AapjeOmino::doeZet (Zet zet)
 //*************************************************************************
 
 vector<Zet> AapjeOmino::bepaalGoedeZetten ()
-{ 
+{
 	vector<Zet> zetten;
 
 	// TODO: implementeer deze memberfunctie
