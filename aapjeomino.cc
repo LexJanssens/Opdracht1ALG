@@ -187,12 +187,26 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten ()
 
 int AapjeOmino::haalSteenUitPot ()
 {
+	if (pot >= nrStenen) {
+		cout << "De pot is leeg." << endl;
+		return -1;
+	}
+
+	if (bepaalMogelijkeZetten().size() > 0) {
+		cout << "Er kan nog een steen worden aangelegd." << endl;
+		return -1;
+	}
+
+	if (actie != 0) {
+		cout << "Je hebt al een actie gedaan." << endl;
+		return -1;
+	}
 	if (aanBeurt) 
 		stenenLieke.push_back(pot);
 	else 
 		stenenFemke.push_back(pot);
 	pot++;
-	return 0;
+	return pot - 1;
 }  // haalSteenUitPot
 
 //*************************************************************************
