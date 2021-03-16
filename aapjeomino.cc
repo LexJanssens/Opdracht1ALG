@@ -97,10 +97,12 @@ bool AapjeOmino::eindstand ()
 	for (i=0; stenenLieke[i] != -1; i++); //hoeveelheid stenen Lieke
 	for (j=0; stenenFemke[j] != -1; j++); //hoeveelheid stenen Femke
 
-	cout << "Score Femke: " << j-i << endl; //Femke-Lieke
-	cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
-	return false;
-
+        if (((i == 0 || j == 0) && pot == nrStenen)) /*OF I aan de beurt en kan niet zetten OF J aan de beurt en kan niet zetten*/  {
+      cout << "Score Femke: " << j-i << endl; //Femke-Lieke
+      cout << "Score Lieke: " << i-j << endl; //Lieke-Femke
+      return true;
+   	}
+   	return false;
 }  // eindstand
 
 //*************************************************************************
