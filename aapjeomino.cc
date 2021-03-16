@@ -15,10 +15,9 @@ AapjeOmino::AapjeOmino ()
 
 //*************************************************************************
 
-bool AapjeOmino::leesIn (const char* invoernaam) 
+bool AapjeOmino::leesIn (const char* invoernaam)
 {
 	int beginStenen, rijStartSteen, kolomStartSteen, getal;
-
 	ifstream invoer (invoernaam, ios::in);
 
 	if (!invoer.is_open()) { // checkt of het bestand wel to openen is
@@ -28,15 +27,13 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 
 	invoer >> hoogte;
 	invoer.get();
-	if (hoogte > MaxDimensie){
-		cout << "Het bord is te hoog." << endl;
+	if (!integerInBereik ("Hoogte", hoogte, 1, 10)) {
 		return false;
 	}
 
 	invoer >> breedte;
 	invoer.get();
-	if (breedte > MaxDimensie){
-		cout << "Het bord is te breedt." << endl;
+	if (!integerInBereik ("Breedte", breedte, 1, 10)) {
 		return false;
 	}
 
@@ -53,7 +50,8 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 	invoer.get();
 	invoer >> kolomStartSteen;
 	invoer.get();
-	if (rijStartSteen >= MaxDimensie || kolomStartSteen >= MaxDimensie || rijStartSteen < 0 || kolomStartSteen < 0) {
+	if (!integerInBereik("rijStartSteen", rijStartSteen, 1, breedte) ||
+        !integerInBereik("kolomStartSteen", kolomStartSteen, 1, hoogte)) {
 		cout << "De startsteen ligt niet op het bord." << endl;
 		return false;
 	}
@@ -67,8 +65,8 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 	}
 
 	// stopt de stenen in de index lijst
-	// en initialiseert 
-	for (int i = 0; i < nrStenen; i++) { 
+	// en initialiseert
+	for (int i = 0; i < nrStenen; i++) {
 		stenenFemke[i] = -1;
 		stenenLieke[i] = -1;
 		for (int j = 0; j < 4; j++) {
@@ -87,9 +85,7 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 		haalSteenUitPot();
 		wisselSpeler();
 	}
-
 	invoer.close();
-
 	return true;
 }	// leesIn
 
