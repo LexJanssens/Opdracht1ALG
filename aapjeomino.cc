@@ -151,6 +151,7 @@ void AapjeOmino::drukAf()
 	//stenen:
 	cout << "Stenen pot: ";
 	for (int i = pot; i < nrStenen; i++) {
+      cout << i << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[i][j] << ",";
       cout << "  ";
@@ -158,6 +159,7 @@ void AapjeOmino::drukAf()
 	cout << endl << "Femke: ";
 
 	for (int i = 0; i < k; i++) {
+      cout << stenenFemke[i] << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenFemke[i]][j] << ",";
       cout << "  ";
@@ -165,6 +167,7 @@ void AapjeOmino::drukAf()
 	cout << endl << "Lieke: ";
 
 	for (int i = 0; i < l; i++) {
+      cout << stenenLieke[i] << ": ";
       for (int j = 0; j < 4; j++)
          cout << stenen[stenenLieke[i]][j] << ",";
       cout << "  ";
