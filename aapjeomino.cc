@@ -99,11 +99,11 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 bool AapjeOmino::eindstand ()
 {
 	int i = stenenLieke.size(), j = stenenFemke.size();
-
-	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) &&
-      	(pot == nrStenen && bepaalMogelijkeZetten)) {
-		return true;
-	}
+   	if (((i == 0 && aanBeurt) || (j == 0 && !aanBeurt)) ||
+      	(pot == nrStenen && bepaalMogelijkeZetten().size() == 0))
+   	{
+     	 return true;
+   	}
 	return false;
 }  // eindstand
 
