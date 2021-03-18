@@ -88,7 +88,11 @@ class AapjeOmino
 	//   - de speler aan beurt is gewisseld,
 	// * als het geen geldige zet is, is de stand niet veranderd.
 	bool doeZet (Zet zet);
+	
+ 	void unDoeZet (Zet zet);
 
+	void doeSteenInPot ( );
+ 
 	// Bepaal alle goede zetten voor de speler die aan de beurt is:
 	// mogelijke zetten met zoveel mogelijk buurvakjes.
 	// Retourneer:
@@ -146,6 +150,7 @@ class AapjeOmino
 	int hoogte, breedte,  // van het bord
 		nrStenen, // totaal aantal stenen in het spel
 		aanBeurt = 0; // speler die aan de beurt is FEMKE
+ 		beginStenen; //hoeveelheid stenen waarmee elke speler begint
 	
 	vector <int> stenenFemke;
 	vector <int> stenenLieke;
