@@ -17,7 +17,7 @@ AapjeOmino::AapjeOmino ()
 
 bool AapjeOmino::leesIn (const char* invoernaam)
 {
-	int beginStenen, rijStartSteen, kolomStartSteen, getal;
+	int rijStartSteen, kolomStartSteen, getal;
 
 	ifstream invoer (invoernaam, ios::in);
 
@@ -82,11 +82,11 @@ bool AapjeOmino::leesIn (const char* invoernaam)
 	//verdelen van de beginstenen aan de spelers
 	for (int i = 0; i < beginStenen * 2; i++) {
 		if (aanBeurt)
-			stenenLieke.push_back(pot);
-		else
-			stenenFemke.push_back(pot);
-   		pot++;
-		wisselSpeler();
+         stenenLieke.push_back(pot);
+      else
+         stenenFemke.push_back(pot);
+      pot++;
+      wisselSpeler();
 	}
 
 	invoer.close();
