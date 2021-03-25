@@ -184,6 +184,11 @@ void AapjeOmino::drukAf()
 		cout << "Score Femke: " << static_cast<int>(stenenFemke.size()-stenenLieke.size()) << endl; //Femke-Lieke
 		cout << "Score Lieke: " <<static_cast<int>(stenenLieke.size()-stenenFemke.size()) << endl; //Lieke-Femke
 	}
+	cout << endl;
+	for (int i = 0; i < allescores.size(); i++) {
+      cout << allescores[i] << ", ";
+	}
+
 }  // drukAf
 
 //*************************************************************************
@@ -419,12 +424,7 @@ void AapjeOmino::unDoeZet (Zet zet)
 	//mogelijk waren-> zo niet, doe de steen terug in de pot.
 	bord[zet.getRij()][zet.getKolom()].first = -1;
 	bord[zet.getRij()][zet.getKolom()].second = 0;
-
 	wisselSpeler();
-	// if ((bepaalMogelijkeZetten().size() == 0) &&
-	// 	(pot <= nrStenen) && (actie == 0) && (!eindstand()))
-	// 	doeSteenInPot();
-	// else {
 	if (!aanBeurt) {
 		stenenFemke.push_back(zet.getI());
 		sort(stenenFemke.begin(), stenenFemke.end());
@@ -433,7 +433,6 @@ void AapjeOmino::unDoeZet (Zet zet)
 		stenenLieke.push_back(zet.getI());
 		sort(stenenLieke.begin(), stenenLieke.end());
 	}
-	// }
 }
 
 //*************************************************************************
@@ -447,14 +446,23 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 
 	cout << "[ ";
 	if (eindstand()) {
+         cout << "<" << aanBeurt << "|EINDSTAND: ";
+         for (int i = 0; i < stenenFemke.size(); i++) {
+            cout << stenenFemke[i] << ",";
+         } cout << "|";
+         for (int i = 0; i < stenenLieke.size(); i++) {
+            cout << stenenLieke[i] << ",";
+         } cout << ">";
 		if (aanBeurt) {
 			cout << static_cast<int>(stenenFemke.size()-stenenLieke.size());
 			cout << "] ";
+			allescores.push_back(stenenFemke.size()-stenenLieke.size());
 			return static_cast<int>(stenenFemke.size()-stenenLieke.size());
 		}
 		else {
 			cout << static_cast<int>(stenenLieke.size()-stenenFemke.size());
 			cout << "] ";
+			allescores.push_back(stenenLieke.size()-stenenFemke.size());
 			return static_cast<int>(stenenLieke.size()-stenenFemke.size());
 		}
 	}
@@ -462,39 +470,50 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 		zetten = bepaalMogelijkeZetten();
 		s = zetten.size();
 		if (s == 0) {
+         cout << "<" << aanBeurt << "|UITPOT:" << pot << ">";
 			haalSteenUitPot();
 			zetten = bepaalMogelijkeZetten();
 			s = zetten.size();
 			if (s == 0) {
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|WISSEL>";
+            wisselSpeler();
 				score = -besteScore(besteZet, aantalStanden);
-				wisselSpeler();
-			} else {
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|WISSEL>";
+            wisselSpeler();
+			}
+			else {
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|ZET:" << zetten[0].getI() << ">";
 				doeZet(zetten[0]);
 				score = -besteScore(besteZet, aantalStanden);
 				if (score > maxscore) {
 					maxscore = score;
 					besteZet = zetten[0];
 				}
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|UNDOZET:" << zetten[0].getI() << ">";
 				unDoeZet(zetten[0]);
+
 			}
+			cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|INPOT:" << pot-1 << ">";
 			doeSteenInPot();
+
 		}
 		else {
 			for (int i = 0; i < s; i++) {
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|ZET:" << zetten[i].getI() << ">";
 				doeZet(zetten[i]);
 				score = -besteScore(besteZet, aantalStanden);
 				if (score > maxscore) {
 					maxscore = score;
 					besteZet = zetten[i];
 				}
+            cout << "<" << aanBeurt << "->" << 1-aanBeurt << "|UNDOZET:" << zetten[i].getI() << ">";
 				unDoeZet(zetten[i]);
-			}	
+			}
 		}
 		cout << "] ";
 		return maxscore;
 	}
 }  // besteScore
-
 //*************************************************************************
 
 bool AapjeOmino::genereerRandomSpel (int hoogte0, int breedte0,
