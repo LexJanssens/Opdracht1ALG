@@ -156,6 +156,7 @@ class AapjeOmino
 	vector <int> stenenLieke;
 	int pot = 1;
 	int stenen[MaxDimensie][4]; // maximale aantal kan hierboven zijn
+ 	vector<int> allescores;
 };
 
 #endif
