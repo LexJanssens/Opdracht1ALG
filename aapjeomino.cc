@@ -9,13 +9,11 @@
 
 AapjeOmino::AapjeOmino()
 {
-// TODO: implementeer (zo nodig) deze constructor
 }  // default constructor
 
 //*************************************************************************
 
 // Leest een spel in vanuit een tekstbestand dat geopend word met de invoernaam
-// 
 bool AapjeOmino::leesIn(const char* invoernaam)
 {
 	int aantalBeginStenen, rijStartSteen, kolomStartSteen, getal;
@@ -213,7 +211,7 @@ vector<Zet> AapjeOmino::bepaalMogelijkeZetten()
 					// gaat elke steen in de hand van de speler aan de beurt af
 					for (int k = 0; k < grote; k++) {
 						for (int l = 0; l < 4; l++) { // gaat iedere rotatie af
-							if ( // elke zijde igrote of een zijkant of leeg of sluit aan
+							if ( // elke zijde is of een zijkant of leeg of sluit aan
 								(i-1 < 0 || 
 								stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4]
 								== stenen[stenenLieke[k]][(0+l)%4] ||
@@ -289,17 +287,14 @@ int AapjeOmino::haalSteenUitPot()
 		cout << "De pot is leeg." << endl;
 		return -1;
 	}
-
 	if (bepaalMogelijkeZetten().size() > 0) {
 		cout << "Er kan nog een steen worden aangelegd." << endl;
 		return -1;
 	}
-
 	if (actie != 0) {
 		cout << "Er is al een steen uit de pot gehaald." << endl;
 		return -1;
 	}
-
 	if (aanBeurt)
 		stenenLieke.push_back(pot);
 	else
@@ -506,12 +501,10 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 
 	aantalStanden++;
 	if (eindstand()) {
-		if (aanBeurt) {
+		if (aanBeurt) 
 			return static_cast<int>(stenenFemke.size()-stenenLieke.size());
-		}
-		else {
+		else 
 			return static_cast<int>(stenenLieke.size()-stenenFemke.size());
-		}
 	}
 	else { 
 		zetten = bepaalMogelijkeZetten();
