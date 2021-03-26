@@ -559,8 +559,7 @@ bool AapjeOmino::genereerRandomSpel (
 	int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
 	int minGetal, int maxGetal)
 {
-
-	if (!integerInBereik ("hoogte0", hoogte0, 1, MaxDimensie))
+   if (!integerInBereik ("hoogte0", hoogte0, 1, MaxDimensie))
 		return false;
 
 	if (!integerInBereik ("breedte0", breedte0, 1, MaxDimensie))
@@ -571,25 +570,29 @@ bool AapjeOmino::genereerRandomSpel (
 		return false;
 	}
 
-	if (!integerInBereik("rij0", rij0, 1, breedte) ||
-		!integerInBereik("kolom0", kolom0, 1, hoogte))
+	if (!integerInBereik("rij0", rij0, 1, breedte0) ||
+      !integerInBereik("kolom0", kolom0, 1, hoogte0)) {
+		cout << "De startsteen ligt niet op het bord." << endl;
 		return false;
+	}
+   hoogte = hoogte0;
+   breedte = breedte0;
+   nrStenen = nrStenen0;
+	beginStenen = nrStenenInHand0;
 
-	// Bord op -1 & 0, zodat het bord leeg is.
+	//Bord op -1 & 0, zodat er geen stenen zijn.
 	for (int i = 0; i < MaxDimensie; i++) {
 		for (int j = 0; j < MaxDimensie; j++) {
 			bord[i][j].first = -1;
 			bord[i][j].second = 0;
 		}
 	}
-
-	// genereer de stenen
-	for (int i = 0; i < nrStenen0; i++) {
+   //genereer stenen
+   for (int i = 0; i < nrStenen0; i++) {
 		for (int j = 0; j < 4; j++) {
 			stenen[i][j] = randomGetal(minGetal, maxGetal);
 		}
-	}
-
+   }
 	// leggen beginsteen
 	bord[rij0][kolom0].first = 0;
 	bord[rij0][kolom0].second = 0;
@@ -597,11 +600,11 @@ bool AapjeOmino::genereerRandomSpel (
 	//verdelen van de beginstenen aan de spelers
 	for (int i = 0; i < nrStenenInHand0 * 2; i++) {
 		if (aanBeurt)
-			stenenLieke.push_back(pot);
-		else
-			stenenFemke.push_back(pot);
-		pot++;
-		wisselSpeler();
+         stenenLieke.push_back(pot);
+      else
+         stenenFemke.push_back(pot);
+      pot++;
+      wisselSpeler();
 	}
 	return true;
 }  // genereerRandomSpel
