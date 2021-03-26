@@ -162,8 +162,84 @@ void doeSpel (AapjeOmino *ao1)
 
 // Voert de experimenten uit zoals beschreven in de opdracht.
 void doeExperimenten ()
+void doeExperimenten ()
 {
-  // TODO: implementeer deze functie
+   AapjeOmino *ao1;
+   int n; //stenen
+   clock_t t1,t2;
+   double gScore, gTijd, gEind;
+   long long int standen, gStanden, standen1;
+   Zet besteZet;
+   vector<Zet> zetten;
+
+   cout << "Welke N wordt er gebruikt? ";
+   cin >> n;
+   cout << endl;
+
+
+
+   for (int i = 0; i < 10; i++) {
+      standen = 0;
+      ao1 = new AapjeOmino;
+      ao1->genereerRandomSpel(7, 7, n, n/4, 3, 3, 1, n);
+
+      t1 = clock ();
+      gScore = ao1->besteScore (besteZet, standen);
+      t2 = clock ();
+
+      cout << ((t2-t1)/CLOCKS_PER_SEC) << endl;
+
+      gTijd += (((t2-t1))/CLOCKS_PER_SEC);
+      gStanden += standen;
+
+      while (!ao1->eindstand()) {
+         if (ao1->aanBeurt == 0) {
+            zetten = ao1->bepaalGoedeZetten(); //speler 1
+            if (zetten.size() == 0) {
+               ao1->haalSteenUitPot();
+               zetten = ao1->bepaalGoedeZetten();
+               if (zetten.size()==0)
+                  ao1->wisselSpeler ();
+               else
+                  ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+            }
+            else
+               ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+         }
+         else {
+            zetten = ao1->bepaalMogelijkeZetten();
+            if (zetten.size() == 0) {
+               ao1->haalSteenUitPot();
+               zetten = ao1->bepaalMogelijkeZetten();
+               if (zetten.size() == 0)
+                  ao1->wisselSpeler();
+               else {
+                  ao1->doeZet(zetten[0]);
+                  //ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+               }
+            }
+            else {
+               besteZet = zetten[0];
+               ao1->besteScore(besteZet, standen1); //speler 2
+               ao1->doeZet(besteZet); //speler 2
+               cout << besteZet.getI();
+              // ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+            }
+         }
+         ao1->drukAf();
+      }
+      ao1->drukAf();
+      cout << i+1 << "/" << n << endl;
+      delete ao1;
+   }
+   gTijd /= n;
+   gScore /= n;
+   gStanden /= n;
+   gEind /= n;
+   cout << "Score: " << gScore << endl;
+   cout << "Standen: " << gStanden << endl;
+   cout << "Tijd: " << gTijd << endl;
+   cout << "Eind: " << gEind << endl;
 
 }  // doeExperimenten
 
