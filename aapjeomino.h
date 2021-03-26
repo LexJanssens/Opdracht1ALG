@@ -10,10 +10,12 @@ using namespace std;
 const int MaxDimensie = 10;  // maximaal aantal rijen en maximaal aantal
 									// kolommen in een spel
 
+
+
 class AapjeOmino
 { public:
 	// Default constructor.
-	AapjeOmino ();
+	AapjeOmino();
 
 	// Lees een spel in vanuit tekstbestand invoernaam.
 	// Controleer daarbij
@@ -28,23 +30,23 @@ class AapjeOmino
 	// Post:
 	// * als aan alle voorwaarden is voldaan, zijn de stenen verdeeld over
 	//   het bord, de twee handen en de pot
-	bool leesIn (const char* invoernaam);
+	bool leesIn(const char* invoernaam);
 
 	// Controleer of we een eindstand hebben bereikt:
 	// * een van de twee spelers heeft geen stenen meer
 	// * of er is geen mogelijke zet voor de speler die aan de beurt is,
 	//   terwijl de pot leeg is
-	bool eindstand ();
+	bool eindstand();
 
 	// Druk de hele stand (bord, stenen in de twee handen en de pot,
 	// speler aan beurt) af op het scherm.
-	void drukAf ();
+	void drukAf();
 
 	// Bepaal alle mogelijke zetten voor de speler die aan de beurt is:
 	// combinaties (steen, rotatie, rij, kolom) die aansluiten bij de stenen
 	// op het bord.
 	// Retourneer: een vector met al deze zetten
-	vector<Zet> bepaalMogelijkeZetten ();
+	vector<Zet> bepaalMogelijkeZetten();
 
 	// Haal voor de speler die op dit moment aan de beurt is,
 	// een steen uit de pot.
@@ -61,14 +63,14 @@ class AapjeOmino
 	//   is deze steen verhuisd van de pot naar de hand van de speler
 	//   die aan de beurt is
 	// * de speler aan beurt is nog niet veranderd
-	int haalSteenUitPot ();
+	int haalSteenUitPot();
 
 	// Wissel de speler die aan de beurt is.
 	// Pre:
 	// * de speler aan beurt is klaar met zijn beurt
 	// Post:
 	// * de speler aan beurt is de andere speler geworden
-	void wisselSpeler ();
+	void wisselSpeler();
 
 	// Doe een zet voor de speler die aan de beurt is:
 	// steen i met rotatie r op vakje (rij,kolom), samen in parameter zet.
@@ -87,17 +89,23 @@ class AapjeOmino
 	//     aan de beurt was,
 	//   - de speler aan beurt is gewisseld,
 	// * als het geen geldige zet is, is de stand niet veranderd.
-	bool doeZet (Zet zet);
-	
- 	void unDoeZet (Zet zet);
+	bool doeZet(Zet zet);
 
-	void doeSteenInPot ( );
- 
 	// Bepaal alle goede zetten voor de speler die aan de beurt is:
 	// mogelijke zetten met zoveel mogelijk buurvakjes.
 	// Retourneer:
 	// * een vector met al deze zetten
-	vector<Zet> bepaalGoedeZetten ();
+	vector<Zet> bepaalGoedeZetten();
+
+
+	// Haalt de laatste gepakte steen uit de hand van de bijbehorende speler
+	// En stopt deze terug in de pot
+	void doeSteenInPot();
+
+	// Haalt de Zet zet weer weg van het bord. Doe het in de hand van de speler
+	// die nu niet aan de beurt is. Controleer of er zonder die steen zetten
+	// mogelijk waren -> zo niet, doe de steen terug in de pot.
+ 	void unDoeZet(Zet zet);
 
 	// Bepaal met behulp van brute force de eindscore voor de speler die in
 	// de huidige stand (= de stand van de huidige recursieve aanroep)
@@ -116,7 +124,7 @@ class AapjeOmino
 	// * aantalStanden is gelijk aan het aantal standen dat we hebben
 	//   bekeken bij het bepalen van de beste eindscore
 	// * de stand in het spel is nog onveranderd
-	int besteScore (Zet &besteZet, long long &aantalStanden);
+	int besteScore(Zet &besteZet, long long &aantalStanden);
 
 	// Genereer een spel met bepaalde parameters en random getallen tussen
 	// minGetal en maxGetal (inclusief) op de stenen.
@@ -136,28 +144,26 @@ class AapjeOmino
 	//     de twee handen en de pot
 	// * als niet alle parameters OK zijn, is een eventueel in het object
 	//   aanwezige stand niet veranderd
-	bool genereerRandomSpel (int hoogte0, int breedte0,
+	bool genereerRandomSpel(int hoogte0, int breedte0,
 			int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
 			int minGetal, int maxGetal);
-
 	private:
-	// TODO: uw eigen memberfuncties en -variabelen
-	
-	// alvast enkele membervariabelen
-	pair<int,int> bord[MaxDimensie][MaxDimensie];
-	
-	// in een pair kunnen we een steennummer en een rotatie opslaan
-	int hoogte, breedte,  // van het bord
-		nrStenen, // totaal aantal stenen in het spel
-		aanBeurt = 0; // speler die aan de beurt is FEMKE
- 		beginStenen; //hoeveelheid stenen waarmee elke speler begint
-	
-	vector <int> stenenFemke;
-	vector <int> stenenLieke;
-	int pot = 1;
-	int stenen[MaxDimensie][4]; // maximale aantal kan hierboven zijn
- 	vector<int> allescores;
+		// in een pair kunnen we een steennummer en een rotatie opslaan
+		// first = nr steen second = rotatie
+		pair<int,int> bord[MaxDimensie][MaxDimensie]; 
+
+		int hoogte, breedte,  // van het bord
+			nrStenen, // totaal aantal stenen in het spel
+			aanBeurt = 0; // speler die aan de beurt is 0 = Femke, 1=Lieke
+
+		// Houd de actie bij die het laatst is gedaan
+		int actie = 0; // 0 = speler gewisseld, 1 = steen gelegd & 2 = steen gepakt
+
+		// bevat de stenen in de hand van Femke en Lieke
+		vector <int> stenenFemke;
+		vector <int> stenenLieke;
+		int pot = 1; // bevat het steen nummer van de eerste volgende steen in de pot
+		int stenen[MaxDimensie][4]; // maximale aantal kan hierboven zijn
 };
 
 #endif
-
