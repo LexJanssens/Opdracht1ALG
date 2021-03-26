@@ -14,6 +14,9 @@ AapjeOmino::AapjeOmino()
 //*************************************************************************
 
 // Leest een spel in vanuit een tekstbestand dat geopend word met de invoernaam
+// Het verdeeld de stenen over het bord(stenen[][]), 
+// de twee handen(stenenFemke, stenenLieke) en de pot(pot).
+// Ook word er gecontroleerd of eerste drie regels aan de specificaties voldoen
 bool AapjeOmino::leesIn(const char* invoernaam)
 {
 	int aantalBeginStenen, rijStartSteen, kolomStartSteen, getal;
@@ -477,15 +480,13 @@ void AapjeOmino::unDoeZet (Zet zet)
 //*************************************************************************
 
 // Bepaalt met behulp van brute force de eindscore voor de speler die in
-// de huidige stand (= de stand van de huidige recursieve aanroep)
-// aan de beurt is, wanneer beide spelers vanaf dit punt optimaal verder
-// spelen.
+// de huidige stand (= de stand van de huidige recursieve aanroep) aan de beurt is, 
+// wanneer beide spelers vanaf dit punt optimaal verder spelen.
 // De score is het aantal resterende stenen van de andere speler min
-// het aantal resterende stenen van de huidige speler (hoe hoger hoe
-// beter).
-// De berekende eindscore word geretourneerd en
-// als de huidige speler in deze beurt daadwerkelijk een steen kan
-// opleggen (eventueel na een steen uit de pot gehaald te hebben),
+// het aantal resterende stenen van de huidige speler (hoe hoger hoe beter).
+// De berekende eindscore word geretourneerd en als de huidige speler in 
+// deze beurt daadwerkelijk een steen kan opleggen 
+// (eventueel na een steen uit de pot gehaald te hebben),
 // bevat parameter besteZet een zet voor de huidige speler aan beurt
 // die tot de beste score kan leiden
 // Anders bevat parameter besteZet een passende default waarde
@@ -558,6 +559,7 @@ bool AapjeOmino::genereerRandomSpel (
 	int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
 	int minGetal, int maxGetal)
 {
+
 	if (!integerInBereik ("hoogte0", hoogte0, 1, MaxDimensie))
 		return false;
 
