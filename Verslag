@@ -1,0 +1,148 @@
+
+%
+% Stel je wilt het C++-programma iets.cc mooi printen,
+% en wellicht er nog wat begeleidende tekst bij schrijven.
+%
+
+\documentclass[10pt]{article}
+
+\parindent=0pt
+
+\usepackage{fullpage}
+
+\frenchspacing
+
+\usepackage{graphicx}
+
+\usepackage{microtype}
+
+\usepackage[english,dutch]{babel}
+
+\usepackage{listings}
+% Er zijn talloze parameters ...
+\lstset{language=C++, showstringspaces=false, basicstyle=\small,
+  numbers=left, numberstyle=\tiny, numberfirstline=false, breaklines=true,
+  stepnumber=1, tabsize=8, 
+  commentstyle=\ttfamily, identifierstyle=\ttfamily,
+  stringstyle=\itshape}
+
+\usepackage[setpagesize=false,colorlinks=true,linkcolor=red,urlcolor=blue,pdftitle={Het grote probleem},pdfauthor={Victor Erslag}]{hyperref}
+
+\title{Algoritmiek \\ Eerste Programmeeropgave: AapjeOmino}
+\author{Bart Aaldering en Lex Janssens}
+
+\begin{document}
+
+\selectlanguage{dutch}
+
+\maketitle
+
+\section{Introductie}
+Dit programma is opdracht 1, 'AapjeOmino', uit de studie Informatica te Leiden voor het vak Algoritmiek. \\
+Gemaakt en geschreven door:
+Bart Aaldering (s.....) en Lex Janssens (s2989344).\\ Programmeertaal: C$\stackrel{++}{}$\\
+Compiler: GNU GCC Compiler\\
+
+'AapjeOmino' is een combinatie van twee spellen: de aapjespuzzel en Triominos. De aapjespuzzel bestaat uit stukken met aan elk van de zijde een bovenkant met een groen, rood, blauw of geel shirt, of een onderkant met een groene, rode, blauwe of gele broek. Stukken mogen alleen aangelegd worden wanneer de kleur van het shirt aangrenzend aan de broek hetzelfde zijn (en vice versa). De stukken mogen gedraaid worden, maar alle zijden (als ze aangrenzen aan een ander stuk) moeten aan de voorwaarden voldoen. Al snel zie je dus dat dit erg moeilijk is, vooral met meer stukken en/of een gelimiteerd veld. Figuur 1 laat een voorbeeld van dit spel zien. \\
+Triominos is een spel, bestaande uit driehoekige stukken met aan elke punt een getal. Ook hier geldt, om een steen aan te kunnen leggen, moet het nummer van alle zijdes overeenkomen met het nummer op de aangrenzende steen. Ook hier mogen de stukken gedraaid worden. Als een speler niet kan, moet deze een steen uit de pot halen.\\
+'AapjeOmino' is dus een combinatie van deze spellen: het heeft vierkante stenen met aan elke zijde een nummer. Dit nummer moet overeenkomen met het nummer op de aangrenzende stenen. Verder mogen de stenen gedraaid worden en is er een pot waar spelers stenen uit kunnen pakken als ze niets kunnen aanleggen. Er wordt gespeeld op een gelimiteerd bord. \\\\
+
+De opdracht luidt: programmeer dit programma in C$\stackrel{++}{}$ en zoek uit wat de beste zetten zijn voor de spelende persoon en wat de beste score is wanneer beide spelers optimaal spelen. Er zijn twee spelers, Femke en Lieke, die tegen elkaar spelen. Beiden willen graag winnen en daarbij willen ze optimaal spelen. Het spel begint met een leeg bord waar enkel een beginsteen op is gelegd. De spelers hebben dezelfde hoeveelheids stenen gekregen in hun hand. Er kan mogelijk een pot zijn. Femke mag de eerste zet doen. Nadat het spel klaar is met opstarten kan er gespeeld worden. Alle mogelijke zetten worden voor de persoon die aan de beurt is bepaald. De gebruiker heeft nu de keuze om één van deze zetten te spelen, de beste zet te bepalen, de beste score te bepalen wanneer er door beide partijen optimaal wordt gespeeld, of dit spel te afsluiten. Het spel eindigt wanneer de spelende persoon geen stenen meer heeft of de spelende persoon is aan de beurt en niet kan leggen en de pot is leeg.  \\
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[scale = 0.4]{aapjes.png}
+    \caption{Aapjespuzzel, R. van Vliet 2021 LIACS}
+    
+\end{figure}
+
+\section{\texttt{vector<Zet> AapjeOmino::bepaalMogelijkeZetten()}}
+Hier volgt de uitleg van de functie \texttt{vector<Zet> AapjeOmino::bepaalMogelijkeZetten()}. Het programma kijkt eerst wie er aan de beurt is. Dan gaat het programma elk vakje op het bord af om na te gaan of dat vakje buren heeft. Heeft het minstens 1 buur, dan gaat het programma per steen, in de hand van de speler die nu aan de beurt is, kijken of dit past. Het programma gaat dat voor elke rotatie van deze steen testen.Het programma test of de steen aangrenst (West-Oost, Noord-Zuid, of vise versa) of dat dit een leeg vakje is. We mogen testen op lege vakjes, omdat we weten dat het geselecteerde vakje minstens 1 buur moet hebben, zodoende dat dus niet alle buurvakjes leeg zijn. Zodra er een mogelijkheid is gevonden, wordt er een object \texttt{Zet} aangemaakt en wordt dit opgeslagen in \texttt{vector<Zet> mogelijkeZet}. Nadat alle vakjes, alle stenen en alle rotaties zijn doorlopen, wordt de vector \texttt{mogelijkeZet} gereturned.
+\\ 
+\section{\texttt{int AapjeOmino::besteScore()}}
+Hier volgt de uitleg van de functie \texttt{int AapjeOmino::besteScore()}. De functie begint door te kijken of er een eindstand is bereikt. Als dat het geval is, dan wordt de score bepaalt van degene die op dat moment aan de beurt is, en wordt dat gereturned. Als er nog geen eindstand is, dan wordt er gekeken of de spelende persoon überhaupt kan zetten. Als dit niet het geval is, dan wordt er een steen uit de pot gehaald. Als deze gelegd kan worden, wordt deze gelegd. Als dat niet kan, wisselt de beurt. Als de speler zonder een steen te pakken al mogelijke zetten heeft, gaat het programma elk van deze zetten af. Elke keer dat er een zet wordt gedaan of er een steen uit de pot is gehaald en niet gelegd kan worden (waarna de beurt over gaat naar de ander), roept de functie zichzelf recursief op. Zodra er een eindstand is bereikt, eindigt die recursieve laag en springt de functie dus weer terug naar een laag daarvoor. Er wordt dan gekeken of die eindscore de grootste is en past deze met daarbij de zet, indien het geval, aan. Door alles goed te doorlopen, zijn er extra functies aanwezig om zo nodige gebruikte functies ongedaan te maken. Zo is er voor \texttt{doeZet(Zet zet)} ook een \texttt {unDoeZet(Zet zet)}. En ook voor de pot hebben we een extra functie: \texttt{haalSteenUitPot()} heeft als tegenpool \texttt{doeSteenInPot()}. Ook bij het wisselen van speler (wanneer een speler een steen uit de pot heeft gehaald en deze niet kan leggen) wordt er terug gewisseld wanneer de recursieve aanroep eindigt.\\
+De scores worden berekend door de hoeveelheid stenen van persoon 1 af te trekken van de hoeveelheid stenen van persoon 2, en vise versa. Dat betekent dat als de score van persoon 1 bijvoorbeeld 2 is, de score van persoon 2 dan -2 is. Hier hebben we gebruik van gemaakt. Telkens wanneer we \texttt{besteScore()} recursief aanroepen, draaien we positief en negatief om. Zo wordt de score goed doorgegeven en krijgen we een accuratie simulatie van het spel terug. Als uiteindelijk alle recursieve aanroepen zijn geëindigd, wordt de maximale score gereturned. Omdat de parameters \texttt{besteZet} en \texttt{aantalStanden} call by reference zijn en deze worden aangepast in de recursieve aanroepen, krijgen we deze ook uiteindelijk als resultaat terug.\\
+We hebben gekozen om deze functie recursief te maken en geen gebruik te maken van kopieën omdat we bij een recursieve aanroep niet alles hoeven bij te houden. Dit maakte het wel een stuk moeilijker om te schrijven, maar heeft wel een makkelijkere uitvoering. Ook verwachtten we dat een recursieve aanroep sneller is dan kopieën van spellen, aangezien je minder geheugenruimte nodig hebt.\\
+
+\section{\texttt{vector<Zet> AapjeOmino::bepaalGoedeZetten()}}
+Bepaal goede zetten maakt gebruik van \texttt{vector<Zet> AapjeOmino::bepaalMogelijkeZetten()}. Van deze mogelijke zetten wordt er gekeken hoeveel buren deze steen krijgt bij het leggen. De functie returned een vector met zetten die het hoogst aantal buren hebben uit de lijst van mogelijke zetten. Dit laat niet direct zien dat dit goede zetten zijn. Ze zijn goed in de context dat een steen bijvoorbeeld aan 4 andere stenen gelegd kan worden en de kans daarvan is klein, dus als het gebeurt is dat wel speciaal, ofwel 'goed'. Maar dit hoeft niet altijd het geval te zijn. Het volgende voorbeeld laat dat zien....
+
+\textbf{Hier moet een toestand-actie-boom met maximaal 10 toestanden}
+
+
+
+\section{Experiment}
+In dit experiment gaan we onderzoeken voor hoeveelheid stenen N = 8, 9, 10, . . . , 30 wat:
+\begin{enumerate}
+\item de gemiddelde eindscore is voor speler 1 wanneer beide spelers optimaal spelen;
+\item de gemiddelde hoeveelheid standen dat is bekeken om de beste score te berekenen;
+\item de gemiddelde tijd die nodig was om dat te berekenen;
+\item de gemiddelde score voor speler 1 wanneer deze een 'goede zet' speelt, terwijl speler 2 een beste zet speelt.
+\end{enumerate}
+Hiervoor gebruiken we een 7x7 bord, waarbij elke speler ongeveer een vierde van de totale hoeveelheid stenen vast heeft en de pot dus bestaat uit de helft van de stenen. De eerste steen (steen 0) ligt op positie (3,3). Als laatst, getallen op de nummers staan willekeurige nummers tussen 1 en N, inclusief 1 en N. We nemen het gemiddelde op basis van 10 runs met N stenen. De resultaten staan verwerkt in de volgende tabel:
+
+\begin{center}
+\begin{tabular}{ |c||c|c|c|c| } 
+ \hline
+  N & Eindscore & Standen & Tijd & Score na zet \\ 
+ \hline
+ 8 & - & - & - & - \\
+9 & - & - & - & - \\
+10 & - & - & - & - \\
+11 & - & - & - & - \\
+12 & - & - & - & - \\
+13 & - & - & - & - \\
+14 & - & - & - & - \\
+15 & - & - & - & - \\
+16 & - & - & - & - \\
+17 & - & - & - & - \\
+18 & - & - & - & - \\
+19 & - & - & - & - \\
+20 & - & - & - & - \\
+21 & - & - & - & - \\
+22 & - & - & - & - \\
+23 & - & - & - & - \\
+24 & - & - & - & - \\
+25 & - & - & - & - \\
+26 & - & - & - & - \\
+27 & - & - & - & - \\
+28 & - & - & - & - \\
+29 & - & - & - & - \\
+30 & - & - & - & - \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+\section{Tijd}
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+       & Bart Aaldering & Lex Janssens \\ 
+ Tijd (uur) & 26 & 30 \\ 
+ \hline
+ \hline
+ Week 48 & 12 & 14 \\
+ Week 49 & 14 & 16 \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{thebibliography}{XX}
+
+\bibitem{Integer}
+Wikipedia-bijdragers. (2020, 19 mei). \textit{Integer (informatica)}. Geraadpleegd op 6 december 2020, van 
+\textit{https://nl.wikipedia.org/wiki/Integer\_(informatica)}
+
+\bibitem{Fibonacci}
+Wikipedia-bijdragers. (2020, 6 juli). \textit{Rij van Fibonacci}. Geraadpleegd op 6 december 2020, van \textit{https://nl.wikipedia.org/wiki/Rij\_van\_Fibonacci}
+
+\end{thebibliography}
+
+\section*{Code}
+Het programma bestaat uit drie aparte bestanden: een hoofdbestand.cc, een functiebestand.cc en een headerbestand.h. Deze staan hieronder geschreven:\\
+
+
+
+\end{document}
