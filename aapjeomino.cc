@@ -545,19 +545,25 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 			aantalMogenlijkeZetten = zetten.size();
 			if (aantalMogenlijkeZetten == 0) { // na pakken kan nog steeds geen zet
 				wisselSpeler();
+				niv++;
 				score = -besteScore(besteZet, aantalStanden);
+				niv--;
 				if (score > maxscore) {
 					maxscore = score;
-					besteZet.setDefaultWaardes();
+					if (niv == 0)
+						besteZet.setDefaultWaardes();
 				}
 				wisselSpeler();
 			} else { // na het pakken kan er wel een zet
 				for (int i = 0; i < aantalMogenlijkeZetten; i++) {
-					doeZet(zetten[i]);	
+					doeZet(zetten[i]);
+					niv++;
 					score = -besteScore(besteZet, aantalStanden);
-					if (score > maxscore) {
+					niv--;
+					if (score >= maxscore) {
 						maxscore = score;
-						besteZet = zetten[i];
+						if (niv == 0)
+							besteZet = zetten[i];
 					}
 					unDoeZet(zetten[i]);					
 				}
@@ -567,10 +573,13 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 		else { // er is wel een mogenlijke zet
 			for (int i = 0; i < aantalMogenlijkeZetten; i++) {
 				doeZet(zetten[i]);
+				niv++;
 				score = -besteScore(besteZet, aantalStanden);
+				niv--;
 				if (score >= maxscore) {
 					maxscore = score;
-					besteZet = zetten[i];
+					if (niv == 0) 
+						besteZet = zetten[i];
 				}
 				unDoeZet(zetten[i]);
 			}	
