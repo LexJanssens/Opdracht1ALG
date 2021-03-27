@@ -4,7 +4,6 @@
 #include "standaard.h"
 #include "aapjeomino.h"
 #include "fstream"
-#include <algorithm>
 
 //*************************************************************************
 
@@ -499,13 +498,11 @@ void AapjeOmino::unDoeZet (Zet zet)
 
 	if (!aanBeurt) {
 		stenenFemke.push_back(zet.getI());
-		sort(stenenFemke.begin(), stenenFemke.end());
-		// sorteer(stenenFemke);
+		sorteer(stenenFemke);
 	}
 	else {
 		stenenLieke.push_back(zet.getI());
-		sort(stenenLieke.begin(), stenenLieke.end());
-		// sorteer(stenenLieke);
+		sorteer(stenenLieke);
 	}
 }  // unDoeZet
 
@@ -558,7 +555,7 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 				for (int i = 0; i < aantalMogenlijkeZetten; i++) {
 					doeZet(zetten[i]);	
 					score = -besteScore(besteZet, aantalStanden);
-					if (score >= maxscore) {
+					if (score > maxscore) {
 						maxscore = score;
 						besteZet = zetten[i];
 					}
@@ -571,7 +568,7 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 			for (int i = 0; i < aantalMogenlijkeZetten; i++) {
 				doeZet(zetten[i]);
 				score = -besteScore(besteZet, aantalStanden);
-				if (score > maxscore) {
+				if (score >= maxscore) {
 					maxscore = score;
 					besteZet = zetten[i];
 				}
