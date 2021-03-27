@@ -9,94 +9,91 @@ using namespace std;
 
 Zet::Zet ()
 {
-  i = 0;
-  r = 0;
-  rij = 0;
-  kolom = 0;
-
+	i = 0;
+	r = 0;
+	rij = 0;
+	kolom = 0;
 }  // default constructor
 
 //*************************************************************************
 
 void Zet::setDefaultWaardes ()
 {
-  // TODO: implementeer deze functie
-
+	i = -1;
+	r = -1;
+	rij = -1;
+	kolom = -1;
 }  // setDefaultWaardes
 
 //*************************************************************************
 
 void Zet::setWaardes (int i0, int r0, int rij0, int kolom0)
 {
-  if (i0>=0)
-    i = i0;
-  else
-  { i = 0;
-    cout << endl;
-    cout << "i0 mag niet negatief zijn, maar is " << i0 << endl;
-  }
 
-  if (integerInBereik ("r0", r0, 0, 3))
-    r = r0;
-  else
-    r = 0;
+	if (i0>=0)
+		i = i0;
+	else {
+		i = 0;
+		cout << endl;
+		cout << "i0 mag niet negatief zijn, maar is " << i0 << endl;
+	}
 
-  if (rij0>=0)
-    rij = rij0;
-  else
-  { rij = 0;
-    cout << endl;
-    cout << "rij0 mag niet negatief zijn, maar is " << rij0 << endl;
-  }
+	if (integerInBereik ("r0", r0, 0, 3))
+		r = r0;
+	else
+		r = 0;
 
-  if (kolom0>=0)
-    kolom = kolom0;
-  else
-  { kolom = 0;
-    cout << endl;
-    cout << "kolom0 mag niet negatief zijn, maar is " << kolom0 << endl;
-  }
+	if (rij0>=0)
+		rij = rij0;
+	else {
+		rij = 0;
+		cout << endl;
+		cout << "rij0 mag niet negatief zijn, maar is " << rij0 << endl;
+	}
 
+	if (kolom0>=0)
+		kolom = kolom0;
+	else {
+		kolom = 0;
+		cout << endl;
+		cout << "kolom0 mag niet negatief zijn, maar is " << kolom0 << endl;
+	}
 }  // setWaardes
 
 //*************************************************************************
 
 int Zet::getI ()
 {
-  return i;
-
+	return i;
 }  // getI
 
 //*************************************************************************
 
 int Zet::getR ()
 {
-  return r;
-
+	return r;
 }  // getR
 
 //*************************************************************************
 
 int Zet::getRij ()
 {
-  return rij;
-
+	return rij;
 }  // getRij
 
 //*************************************************************************
 
 int Zet::getKolom ()
 {
-  return kolom;
-
+	return kolom;
 }  // getKolom
 
 //*************************************************************************
 
 void Zet::drukAf ()
 {
-  cout << "(steen " << i << ", rotatie " << r << ", vakje ["
-       << rij << "," << kolom << "])" << endl;
-
+	
+	cout << "(steen " << i << ", rotatie " << r << ", vakje [" 
+		<< rij << "," << kolom << "])" << endl;
 }  // drukAf
 
