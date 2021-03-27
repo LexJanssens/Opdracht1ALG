@@ -186,9 +186,9 @@ void doeExperimenten()
 		gScore = ao1->besteScore(besteZet, standen);
 		t2 = clock ();
 
-		cout << ((t2-t1)/CLOCKS_PER_SEC) << endl;
+		//cout << ((t2-t1)/CLOCKS_PER_SEC) << endl;
 
-		gTijd += (((t2-t1))/CLOCKS_PER_SEC);
+		gTijd += (((double)(t2-t1))/CLOCKS_PER_SEC);
 		gStanden += standen;
 		while (!ao1->eindstand()) {
 			if (ao1->fAanBeurt() == 0) {
@@ -199,7 +199,7 @@ void doeExperimenten()
 					if (zetten.size()==0)
 						ao1->wisselSpeler();
 					else
-						ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+						ao1->doeZet(zetten[0]);
 				}
 				else
 					ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
@@ -211,29 +211,25 @@ void doeExperimenten()
 					zetten = ao1->bepaalMogelijkeZetten();
 					if (zetten.size() == 0)
 						ao1->wisselSpeler();
-					else {
+               else
 						ao1->doeZet(zetten[0]);
-						//ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
-					}
 				}
 				else {
 					besteZet = zetten[0];
 					ao1->besteScore(besteZet, standen1); //speler 2
 					ao1->doeZet(besteZet); //speler 2
-					cout << besteZet.getI();
-					// ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
 				}
 			}
-			ao1->drukAf();
 		}
-		ao1->drukAf();
-		cout << i+1 << "/" << n << endl;
+		//ao1->drukAf();
+		gEind += ao1->eindscore();
+		cout << i+1 << "/" << 10 << endl;
 		delete ao1;
 	}
-	gTijd /= n;
-	gScore /= n;
-	gStanden /= n;
-	gEind /= n;
+	gTijd /= 10;
+	gScore /= 10;
+	gStanden /= 10;
+	gEind /= 10;
 	cout << "Score: " << gScore << endl;
 	cout << "Standen: " << gStanden << endl;
 	cout << "Tijd: " << gTijd << endl;
