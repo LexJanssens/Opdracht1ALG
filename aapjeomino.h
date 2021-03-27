@@ -7,15 +7,19 @@
 #include "zet.h"
 using namespace std;
 
-const int MaxDimensie = 10;  // maximaal aantal rijen en maximaal aantal
-									// kolommen in een spel
-
-
+const int MaxDimensie = 10; // maximaal aantal rijen en maximaal aantal
+							// kolommen in een spel
 
 class AapjeOmino
 { public:
 	// Default constructor.
 	AapjeOmino();
+
+	// returnt wie er aan de beurt is
+	int fAanBeurt();
+
+	// sorteert de vector A
+	vector<int> sorteer(vector<int> &A);
 
 	// Lees een spel in vanuit tekstbestand invoernaam.
 	// Controleer daarbij
@@ -163,7 +167,7 @@ class AapjeOmino
 		vector <int> stenenFemke;
 		vector <int> stenenLieke;
 		int pot = 1; // bevat het steen nummer van de eerste volgende steen in de pot
-		int stenen[MaxDimensie][4]; // maximale aantal kan hierboven zijn
+		int stenen[MaxDimensie*MaxDimensie][4]; // maximale aantal kan hierboven zijn
 };
 
 #endif
