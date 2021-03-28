@@ -21,7 +21,6 @@
 #include "standaard.h"
 #include "zet.h"
 #include "aapjeomino.h"
-#include <thread>
 using namespace std;
 const int MaxBestandsNaamLengte = 30; // maximale lengte van een bestandsnaam
 
