@@ -18,6 +18,7 @@ class AapjeOmino
 	// returnt wie er aan de beurt is
 	int fAanBeurt();
 
+	int eindscore();
 	// sorteert de vector A
 	vector<int> sorteer(vector<int> &A);
 
@@ -148,13 +149,14 @@ class AapjeOmino
 	//     de twee handen en de pot
 	// * als niet alle parameters OK zijn, is een eventueel in het object
 	//   aanwezige stand niet veranderd
+
 	bool genereerRandomSpel(int hoogte0, int breedte0,
 			int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
 			int minGetal, int maxGetal);
 	private:
 		// in een pair kunnen we een steennummer en een rotatie opslaan
 		// first = nr steen second = rotatie
-		pair<int,int> bord[MaxDimensie][MaxDimensie]; 
+		pair<int,int> bord[MaxDimensie][MaxDimensie];
 
 		int hoogte, breedte,  // van het bord
 			nrStenen, // totaal aantal stenen in het spel
@@ -162,10 +164,9 @@ class AapjeOmino
 
 		// Houd de actie bij die het laatst is gedaan
 		int actie = 0; // 0 = speler gewisseld, 1 = steen gelegd & 2 = steen gepakt
-
+      int niv = 0;   //niveau van de recursie.
 		// bevat de stenen in de hand van Femke en Lieke
-		vector <int> stenenFemke;
-		vector <int> stenenLieke;
+      vector<vector<int>> stenenHand = {{},{}};
 		int pot = 1; // bevat het steen nummer van de eerste volgende steen in de pot
 		int stenen[MaxDimensie*MaxDimensie][4]; // maximale aantal kan hierboven zijn
 };
