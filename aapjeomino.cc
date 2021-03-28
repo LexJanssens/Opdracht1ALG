@@ -177,31 +177,17 @@ void AapjeOmino::drukAf()
 	cout << endl;
 
 	//stenen:
-	cout << "Stenen pot: ";
+	cout << "Stenen pot: " << endl;
 	vector<int> St;
 	for (int i = pot; i < nrStenen; i++) {
-      St.push_back(i)
+      St.push_back(i);
 	}
-	druk_steen_af(St);
-
-
-	cout << endl << "Femke: ";
-
-	for (int i = 0; i < k; i++) {
-		cout << stenenHand[0][i] << ": ";
-		for (int j = 0; j < 4; j++)
-			cout << stenen[stenenHand[0][i]][j] << ",";
-		cout << "  ";
-	}
-	cout << endl << "Lieke: ";
-
-	for (int i = 0; i < l; i++) {
-		cout << stenenHand[1][i] << ": ";
-		for (int j = 0; j < 4; j++)
-			cout << stenen[stenenHand[1][i]][j] << ",";
-		cout << "  ";
-	}
-	cout << endl;
+	drukSteenAf(St);
+	cout << endl << "Femke: " << endl;
+   drukSteenAf(stenenHand[0]);
+   cout << endl << "Lieke: " << endl;
+   drukSteenAf(stenenHand[1]);
+   cout << endl;
 	if (aanBeurt)
 		cout << "Lieke is aan de beurt" << endl;
 	else
@@ -212,17 +198,19 @@ void AapjeOmino::drukAf()
 	}
 }  // drukAf
 
-void AapjeOmino::druk_steen_af(vector<int> s) {
+void AapjeOmino::drukSteenAf(vector<int> S) {
    cout << "      ";
-			if (bord[i][j].first == -1)
-				cout << "-";
-			else
-				cout << stenen[bord[i][j].first][bord[i][j].second];
-		}
-
-
-
-
+   for (int i = 0; i < S.size(); i++) {
+      cout << stenen[S[i]][0] << "           ";
+   }
+   cout << endl;
+   for (int i = 0; i < S.size(); i++) {
+      cout << S[i] << ":  " << stenen[S[i]][3] << "   " << stenen[S[i]][1] << "   ";
+   }
+   cout << endl << "      ";
+   for (int i = 0; i < S.size(); i++) {
+      cout << stenen[S[i]][2] << "           ";
+   }
 }
 //*************************************************************************
 
