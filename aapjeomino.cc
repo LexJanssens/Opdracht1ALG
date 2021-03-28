@@ -29,8 +29,8 @@ vector<int> AapjeOmino::sorteer(vector<int> &A)
 	for (int i = 1; i < n; i++) {
 		for (int j = 0; j < n -i; j++) {
 			if (A[j] > A[j+1]) {
-				temp = A[j]; 
-				A[j] = A[j+1]; 
+				temp = A[j];
+				A[j] = A[j+1];
 				A[j+1] = temp;
 			}
 		}
@@ -41,7 +41,7 @@ vector<int> AapjeOmino::sorteer(vector<int> &A)
 //*************************************************************************
 
 // Leest een spel in vanuit een tekstbestand dat geopend word met de invoernaam
-// Het verdeeld de stenen over het bord(stenen[][]), 
+// Het verdeeld de stenen over het bord(stenen[][]),
 // de twee handen(stenenFemke, stenenLieke) en de pot(pot).
 // Ook word er gecontroleerd of eerste drie regels aan de specificaties voldoen
 bool AapjeOmino::leesIn(const char* invoernaam)
@@ -63,7 +63,7 @@ bool AapjeOmino::leesIn(const char* invoernaam)
 	invoer.get();
 	if (!integerInBereik ("Breedte", breedte, 1, MaxDimensie))
 		return false;
-	
+
 	invoer >> nrStenen;
 	invoer.get();
 	invoer >> aantalBeginStenen;
@@ -104,11 +104,8 @@ bool AapjeOmino::leesIn(const char* invoernaam)
 
 	// verdelen van de beginstenen aan de spelers
 	for (int i = 0; i < aantalBeginStenen * 2; i++) {
-		if (aanBeurt)
-			stenenLieke.push_back(pot);
-		else
-			stenenFemke.push_back(pot);
-   		pot++;
+      stenenHand[aanBeurt].push_back(pot);
+      pot++;
 		wisselSpeler();
 	}
 	invoer.close();
@@ -121,7 +118,7 @@ bool AapjeOmino::leesIn(const char* invoernaam)
 // Controleer of er een eindstand is bereikt
 bool AapjeOmino::eindstand()
 {
-	int i = stenenLieke.size(), j = stenenFemke.size();
+	int i = stenenHand[0].size(), j = stenenHand[1].size();
 	if (i == 0 || j == 0 ||
 		(pot == nrStenen && bepaalMogelijkeZetten().size() == 0)) {
 		return true;
@@ -131,12 +128,12 @@ bool AapjeOmino::eindstand()
 
 //*************************************************************************
 
-// Drukt de hele stand (stenen in de twee handen en de pot, bord en 
+// Drukt de hele stand (stenen in de twee handen en de pot, bord en
 // de speler aan beurt) af op het scherm.
 void AapjeOmino::drukAf()
 {
-	int k = stenenFemke.size();
-	int l = stenenLieke.size();
+	int k = stenenHand[0].size();
+	int l = stenenHand[1].size();
 	for (int i = 0; i < breedte; i++) {
 		cout << "      " << i;
 	}
@@ -155,15 +152,15 @@ void AapjeOmino::drukAf()
 				if (bord[i][j].first == -1)
 					cout << i << "   " << "-" << "   " << "-";
 				else
-					cout << i << "   " 
+					cout << i << "   "
 					<< stenen[bord[i][j].first][(3+bord[i][j].second)%4] << "   "
 					<< stenen[bord[i][j].first][(1+bord[i][j].second)%4];
 			} else {
 				if (bord[i][j].first == -1)
 					cout << "  " << "-" << "   " << "-";
 				else
-					cout << "  " 
-					<< stenen[bord[i][j].first][(3+bord[i][j].second)%4] << "   " 
+					cout << "  "
+					<< stenen[bord[i][j].first][(3+bord[i][j].second)%4] << "   "
 					<< stenen[bord[i][j].first][(1+bord[i][j].second)%4];
 			}
 		}
@@ -181,26 +178,27 @@ void AapjeOmino::drukAf()
 
 	//stenen:
 	cout << "Stenen pot: ";
+	vector<int> St;
 	for (int i = pot; i < nrStenen; i++) {
-		cout << i << ": ";
-		for (int j = 0; j < 4; j++)
-			cout << stenen[i][j] << ",";
-		cout << "  ";
+      St.push_back(i)
 	}
+	druk_steen_af(St);
+
+
 	cout << endl << "Femke: ";
 
 	for (int i = 0; i < k; i++) {
-		cout << stenenFemke[i] << ": ";
+		cout << stenenHand[0][i] << ": ";
 		for (int j = 0; j < 4; j++)
-			cout << stenen[stenenFemke[i]][j] << ",";
+			cout << stenen[stenenHand[0][i]][j] << ",";
 		cout << "  ";
 	}
 	cout << endl << "Lieke: ";
 
 	for (int i = 0; i < l; i++) {
-		cout << stenenLieke[i] << ": ";
+		cout << stenenHand[1][i] << ": ";
 		for (int j = 0; j < 4; j++)
-			cout << stenen[stenenLieke[i]][j] << ",";
+			cout << stenen[stenenHand[1][i]][j] << ",";
 		cout << "  ";
 	}
 	cout << endl;
@@ -209,100 +207,74 @@ void AapjeOmino::drukAf()
 	else
 		cout << "Femke is aan de beurt" << endl;
 	if (eindstand()) {
-		cout << "Score Femke: " << static_cast<int>(stenenLieke.size()-stenenFemke.size()) << endl; //Femke-Lieke
-		cout << "Score Lieke: " << static_cast<int>(stenenFemke.size()-stenenLieke.size()) << endl; //Lieke-Femke
+		cout << "Score Femke: " << static_cast<int>(stenenHand[1].size()-stenenHand[0].size()) << endl; //Femke-Lieke
+		cout << "Score Lieke: " << static_cast<int>(stenenHand[0].size()-stenenHand[1].size()) << endl; //Lieke-Femke
 	}
 }  // drukAf
 
+void AapjeOmino::druk_steen_af(vector<int> s) {
+   cout << "      ";
+			if (bord[i][j].first == -1)
+				cout << "-";
+			else
+				cout << stenen[bord[i][j].first][bord[i][j].second];
+		}
+
+
+
+
+}
 //*************************************************************************
-	
+
 // Bepaalt alle mogelijke zetten voor de speler die aan de beurt is:
 // de combinaties (steen, rotatie, rij, kolom) die aansluiten bij de stenen
 // op het bord.
 vector<Zet> AapjeOmino::bepaalMogelijkeZetten()
-{ 
+{
 	vector<Zet> zetten;
 	Zet mogelijkeZet;
-	int grote;
-	if (aanBeurt) {
-		grote = stenenLieke.size();
+	int grote = stenenHand[aanBeurt].size();
 
-		// dubbele for loop loopt ieder bord vakje af
-		for (int i = 0; i < hoogte; i++) {
-			for (int j = 0; j < breedte; j++) {
+   // dubbele for loop loopt ieder bord vakje af
+   for (int i = 0; i < hoogte; i++) {
+      for (int j = 0; j < breedte; j++) {
 
-				// checkt of de plek vrij is & er tenminste een aanliggende steen is
-				if (bord[i][j].first == -1 && (
-					(i-1 >= 0 && bord[i-1][j].first != -1) ||
-					(i+1 < hoogte && bord[i+1][j].first != -1) ||
-					(j-1 >= 0 && bord[i][j-1].first != -1) ||
-					(j+1 < breedte && bord[i][j+1].first != -1))) {
-					
-					// gaat elke steen in de hand van de speler aan de beurt af
-					for (int k = 0; k < grote; k++) {
-						for (int l = 0; l < 4; l++) { // gaat iedere rotatie af
-							if ( // elke zijde is of een zijkant of leeg of sluit aan
-								(i-1 < 0 || 
-								stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4]
-								== stenen[stenenLieke[k]][(0+l)%4] ||
-								bord[i-1][j].first == -1) && // boven
-								(i+1 >= hoogte || 
-								(stenen[bord[i+1][j].first][(0+bord[i+1][j].second)%4]
-								== stenen[stenenLieke[k]][(2+l)%4] ||
-								bord[i+1][j].first == -1)) && // onder
-								(j-1 < 0 || 
-								(stenen[bord[i][j-1].first][(1+bord[i][j-1].second)%4]
-								== stenen[stenenLieke[k]][(3+l)%4] ||
-								bord[i][j-1].first == -1)) && // links
-								(j+1 >= breedte || 
-								(stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4]
-								== stenen[stenenLieke[k]][(1+l)%4] ||
-								bord[i][j+1].first == -1))) { // rechts
-								mogelijkeZet.setWaardes(stenenLieke[k], (l)%4, i, j);
-								zetten.push_back(mogelijkeZet);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-	else { // hier gebeurt hetzelfde als bij de if alleen is het femke haar beurt
-		grote = stenenFemke.size();
-		for (int i = 0; i < hoogte; i++) {
-			for (int j = 0; j < breedte; j++) {
-				if (bord[i][j].first == -1 && (
-					(i-1 >= 0 && bord[i-1][j].first != -1) ||
-					(i+1 < hoogte && bord[i+1][j].first != -1) ||
-					(j-1 >= 0 && bord[i][j-1].first != -1) ||
-					(j+1 < breedte && bord[i][j+1].first != -1))) {
-					for (int k = 0; k < grote; k++) {
-						for (int l = 0; l < 4; l++) {
-							if ((i-1 < 0 || 
-								(stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4]
-								== stenen[stenenFemke[k]][(0+l)%4] ||
-								bord[i-1][j].first == -1)) && // boven
-								(i+1 >= hoogte || 
-								(stenen[bord[i+1][j].first][(0+bord[i+1][j].second)%4]
-								== stenen[stenenFemke[k]][(2+l)%4] ||
-								bord[i+1][j].first == -1)) && // onder
-								(j-1 < 0 || 
-								(stenen[bord[i][j-1].first][(1+bord[i][j-1].second)%4]
-								== stenen[stenenFemke[k]][(3+l)%4] ||
-								bord[i][j-1].first == -1)) && // links
-								(j+1 >= breedte || 
-								(stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4]
-								== stenen[stenenFemke[k]][(1+l)%4] ||
-								bord[i][j+1].first == -1))) { // rechts
-								mogelijkeZet.setWaardes(stenenFemke[k], (l)%4, i, j);
-								zetten.push_back(mogelijkeZet);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+         // checkt of de plek vrij is & er tenminste een aanliggende steen is
+         if (bord[i][j].first == -1 && (
+            (i-1 >= 0 && bord[i-1][j].first != -1) ||
+            (i+1 < hoogte && bord[i+1][j].first != -1) ||
+            (j-1 >= 0 && bord[i][j-1].first != -1) ||
+            (j+1 < breedte && bord[i][j+1].first != -1))) {
+
+            // gaat elke steen in de hand van de speler aan de beurt af
+            for (int k = 0; k < grote; k++) {
+               for (int l = 0; l < 4; l++) { // gaat iedere rotatie af
+                  if ( // elke zijde is of een zijkant of leeg of sluit aan
+                     (i-1 < 0 ||
+                     stenen[bord[i-1][j].first][(2+bord[i-1][j].second)%4]
+                     == stenen[stenenHand[aanBeurt][k]][(0+l)%4] ||
+                     bord[i-1][j].first == -1) && // boven
+                     (i+1 >= hoogte ||
+                     (stenen[bord[i+1][j].first][(0+bord[i+1][j].second)%4]
+                     == stenen[stenenHand[aanBeurt][k]][(2+l)%4] ||
+                     bord[i+1][j].first == -1)) && // onder
+                     (j-1 < 0 ||
+                     (stenen[bord[i][j-1].first][(1+bord[i][j-1].second)%4]
+                     == stenen[stenenHand[aanBeurt][k]][(3+l)%4] ||
+                     bord[i][j-1].first == -1)) && // links
+                     (j+1 >= breedte ||
+                     (stenen[bord[i][j+1].first][(3+bord[i][j+1].second)%4]
+                     == stenen[stenenHand[aanBeurt][k]][(1+l)%4] ||
+                     bord[i][j+1].first == -1))) { // rechts
+                     mogelijkeZet.setWaardes(stenenHand[aanBeurt][k], (l)%4, i, j);
+                     zetten.push_back(mogelijkeZet);
+                  }
+               }
+            }
+         }
+      }
+   }
+
 	return zetten;
 }  // bepaalMogelijkeZetten
 
@@ -325,11 +297,8 @@ int AapjeOmino::haalSteenUitPot()
 		cout << "Er is al een steen uit de pot gehaald." << endl;
 		return -1;
 	}
-	if (aanBeurt)
-		stenenLieke.push_back(pot);
-	else
-		stenenFemke.push_back(pot);
-   	pot++;
+	stenenHand[aanBeurt].push_back(pot);
+   pot++;
 	actie = 2;
 	return 0;
 }  // haalSteenUitPot
@@ -365,12 +334,12 @@ bool AapjeOmino::doeZet(Zet zet)
 		return false;
 	if (!integerInBereik ("Kolom", kolom, 0, MaxDimensie-1))
 		return false;
-		
+
 	if (bord[rij][kolom].first != -1) {
 		cout << "Dit vakje is niet leeg" << endl;
 		return false;
 	}
-	
+
 	if (!((rij-1 >= 0 && bord[rij-1][kolom].first != -1) ||
 		(rij+1 < hoogte && bord[rij+1][kolom].first != -1) ||
 		(kolom-1 >= 0 && bord[rij][kolom-1].first != -1) ||
@@ -378,7 +347,7 @@ bool AapjeOmino::doeZet(Zet zet)
 		cout << "Deze plek heeft geen aanliggende steen." << endl;
 		return false;
 	}
-	
+
 	if (!( // kijkt of de steen past voor elk aanliggend vakje
 		// checkt boven
 		(rij-1 < 0 || bord[rij-1][kolom].first == -1 ||
@@ -401,31 +370,21 @@ bool AapjeOmino::doeZet(Zet zet)
 	}
 
 	// kijkt of de spelere aan de beurt de steen wel in haar hand heeft
-	if (!aanBeurt) {
-		grote = stenenFemke.size();
-		for (int j = 0; j < grote; j++) {
-			if (stenenFemke[j] == i) {
-				stenenFemke.erase(stenenFemke.begin()+j);
-				steenInHand = true;
-			}
-		}
-		if (!steenInHand) {
-			cout << "Femke heeft deze steen niet in haar hand." << endl;
-			return false;
-		}
-	} else {
-		grote = stenenLieke.size();
-		for (int j = 0; j < grote; j++) {
-			if (stenenLieke[j] == i) {
-				stenenLieke.erase(stenenLieke.begin()+j);
-				steenInHand = true;
-			}
-		}
-		if (!steenInHand) {
-			cout << "Lieke heeft deze steen niet in haar hand." << endl;
-			return false;
-		}	
-	}
+   grote = stenenHand[aanBeurt].size();
+   for (int j = 0; j < grote; j++) {
+      if (stenenHand[aanBeurt][j] == i) {
+         stenenHand[aanBeurt].erase(stenenHand[aanBeurt].begin()+j);
+         steenInHand = true;
+      }
+   }
+   if (!steenInHand) {
+      if (aanBeurt)
+         cout << "Lieke heeft deze steen niet in haar hand." << endl;
+      else
+         cout << "Femke heeft deze steen niet in haar hand." << endl;
+      return false;
+   }
+
 	bord[rij][kolom].first = i;
 	bord[rij][kolom].second = r;
 	actie = 1;
@@ -447,16 +406,16 @@ vector<Zet> AapjeOmino::bepaalGoedeZetten()
 
 	for (int i = 0; i < sizeZetten; i++) {
 		buren[i] = 0;
-		if (zetten[i].getRij()-1 >= 0 && 
+		if (zetten[i].getRij()-1 >= 0 &&
 			bord[zetten[i].getRij()-1][zetten[i].getKolom()].first != -1)
 			buren[i]++;
-		if (zetten[i].getRij()+1 < hoogte && 
+		if (zetten[i].getRij()+1 < hoogte &&
 			bord[zetten[i].getRij()+1][zetten[i].getKolom()].first != -1)
 			buren[i]++;
-		if (zetten[i].getKolom()-1 >= 0 && 
+		if (zetten[i].getKolom()-1 >= 0 &&
 			bord[zetten[i].getRij()][zetten[i].getKolom()-1].first != -1)
 			buren[i]++;
-		if (zetten[i].getKolom()+1 < breedte && 
+		if (zetten[i].getKolom()+1 < breedte &&
 			bord[zetten[i].getRij()][zetten[i].getKolom()+1].first != -1)
 			buren[i]++;
 		if (buren[i] > beste)
@@ -479,10 +438,7 @@ vector<Zet> AapjeOmino::bepaalGoedeZetten()
 void AapjeOmino::doeSteenInPot()
 {
 	pot--;
-	if (!aanBeurt)
-		stenenFemke.pop_back();
-	else
-		stenenLieke.pop_back();
+	stenenHand[aanBeurt].pop_back();
 }  // doeSteenInPot
 
 //*************************************************************************
@@ -495,26 +451,19 @@ void AapjeOmino::unDoeZet (Zet zet)
 	wisselSpeler();
 	bord[zet.getRij()][zet.getKolom()].first = -1;
 	bord[zet.getRij()][zet.getKolom()].second = 0;
-
-	if (!aanBeurt) {
-		stenenFemke.push_back(zet.getI());
-		sorteer(stenenFemke);
-	}
-	else {
-		stenenLieke.push_back(zet.getI());
-		sorteer(stenenLieke);
-	}
+   stenenHand[aanBeurt].push_back(zet.getI());
+   sorteer(stenenHand[aanBeurt]);
 }  // unDoeZet
 
 //*************************************************************************
 
 // Bepaalt met behulp van brute force de eindscore voor de speler die in
-// de huidige stand (= de stand van de huidige recursieve aanroep) aan de beurt is, 
+// de huidige stand (= de stand van de huidige recursieve aanroep) aan de beurt is,
 // wanneer beide spelers vanaf dit punt optimaal verder spelen.
 // De score is het aantal resterende stenen van de andere speler min
 // het aantal resterende stenen van de huidige speler (hoe hoger hoe beter).
-// De berekende eindscore word geretourneerd en als de huidige speler in 
-// deze beurt daadwerkelijk een steen kan opleggen 
+// De berekende eindscore word geretourneerd en als de huidige speler in
+// deze beurt daadwerkelijk een steen kan opleggen
 // (eventueel na een steen uit de pot gehaald te hebben),
 // bevat parameter besteZet een zet voor de huidige speler aan beurt
 // die tot de beste score kan leiden
@@ -531,12 +480,9 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 
 	aantalStanden++;
 	if (eindstand()) {
-		if (aanBeurt) 
-			return static_cast<int>(stenenFemke.size()-stenenLieke.size());
-		else 
-			return static_cast<int>(stenenLieke.size()-stenenFemke.size());
+      return eindscore();
 	}
-	else { 
+	else {
 		zetten = bepaalMogelijkeZetten();
 		aantalMogenlijkeZetten = zetten.size();
 		if (aantalMogenlijkeZetten == 0) { // geen mogenlijke zetten
@@ -551,7 +497,7 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 				if (score > maxscore) {
 					maxscore = score;
 					if (niv == 0)
-						besteZet.setDefaultWaardes();
+                  besteZet.setDefaultWaardes();
 				}
 				wisselSpeler();
 			} else { // na het pakken kan er wel een zet
@@ -563,9 +509,9 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 					if (score >= maxscore) {
 						maxscore = score;
 						if (niv == 0)
-							besteZet = zetten[i];
+                     besteZet = zetten[i];
 					}
-					unDoeZet(zetten[i]);					
+					unDoeZet(zetten[i]);
 				}
 			}
 			doeSteenInPot();
@@ -578,11 +524,11 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 				niv--;
 				if (score >= maxscore) {
 					maxscore = score;
-					if (niv == 0) 
-						besteZet = zetten[i];
+					if (niv == 0)
+                  besteZet = zetten[i];
 				}
 				unDoeZet(zetten[i]);
-			}	
+			}
 		}
 		return maxscore;
 	}
@@ -590,58 +536,60 @@ int AapjeOmino::besteScore (Zet &besteZet, long long &aantalStanden)
 
 //*************************************************************************
 
+int AapjeOmino::eindscore() {
+   return static_cast<int>(stenenHand[1-aanBeurt].size()-stenenHand[aanBeurt].size());
+}
+
 // Genereer een spel met bepaalde parameters en random getallen tussen
 // minGetal en maxGetal (inclusief) op de stenen.
-bool AapjeOmino::genereerRandomSpel (
-	int hoogte0, int breedte0,
-	int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
-	int minGetal, int maxGetal)
+bool AapjeOmino::genereerRandomSpel (int hoogte0, int breedte0,
+    int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
+    int minGetal, int maxGetal)
 {
+    if (!integerInBereik ("hoogte0", hoogte0, 1, MaxDimensie))
+        return false;
 
-	if (!integerInBereik ("hoogte0", hoogte0, 1, MaxDimensie))
-		return false;
+    if (!integerInBereik ("breedte0", breedte0, 1, MaxDimensie))
+        return false;
 
-	if (!integerInBereik ("breedte0", breedte0, 1, MaxDimensie))
-		return false;
+    if (nrStenen0 < nrStenenInHand0 * 2 + 1) {
+        cout << "Er zijn te weinig stenen." << endl;
+        return false;
+    }
 
-	if (nrStenen0 < nrStenenInHand0 * 2 + 1) {
-		cout << "Er zijn te weinig stenen." << endl;
-		return false;
-	}
+    if (!integerInBereik("rij0", rij0, 1, breedte0) ||
+      !integerInBereik("kolom0", kolom0, 1, hoogte0)) {
+        cout << "De startsteen ligt niet op het bord." << endl;
+        return false;
+    }
+    hoogte = hoogte0;
+    breedte = breedte0;
+    nrStenen = nrStenen0;
 
-	if (!integerInBereik("rij0", rij0, 1, hoogte0) ||
-		!integerInBereik("kolom0", kolom0, 1, breedte0))
-		return false;
+    //Bord op -1 & 0, zodat er geen stenen zijn.
+    for (int i = 0; i < MaxDimensie; i++) {
+        for (int j = 0; j < MaxDimensie; j++) {
+            bord[i][j].first = -1;
+            bord[i][j].second = 0;
+        }
+    }
+   //genereer stenen
+   for (int i = 0; i < nrStenen0; i++) {
+        for (int j = 0; j < 4; j++) {
+            stenen[i][j] = randomGetal(minGetal, maxGetal);
+        }
+   }
+    // leggen beginsteen
+    bord[rij0][kolom0].first = 0;
+    bord[rij0][kolom0].second = 0;
 
-	// Bord op -1 & 0, zodat het bord leeg is.
-	for (int i = 0; i < MaxDimensie; i++) {
-		for (int j = 0; j < MaxDimensie; j++) {
-			bord[i][j].first = -1;
-			bord[i][j].second = 0;
-		}
-	}
-
-	// genereer de stenen
-	for (int i = 0; i < nrStenen0; i++) {
-		for (int j = 0; j < 4; j++) {
-			stenen[i][j] = randomGetal(minGetal, maxGetal);
-		}
-	}
-
-	// leggen beginsteen
-	bord[rij0][kolom0].first = 0;
-	bord[rij0][kolom0].second = 0;
-
-	//verdelen van de beginstenen aan de spelers
-	for (int i = 0; i < nrStenenInHand0 * 2; i++) {
-		if (aanBeurt)
-			stenenLieke.push_back(pot);
-		else
-			stenenFemke.push_back(pot);
-		pot++;
-		wisselSpeler();
-	}
-	return true;
+    //verdelen van de beginstenen aan de spelers
+    for (int i = 0; i < nrStenenInHand0 * 2; i++) {
+      stenenHand[aanBeurt].push_back(pot);
+      pot++;
+      wisselSpeler();
+    }
+    return true;
 }  // genereerRandomSpel
 
 //*************************************************************************
