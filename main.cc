@@ -21,11 +21,21 @@
 #include "standaard.h"
 #include "zet.h"
 #include "aapjeomino.h"
-
+#include <thread>
 using namespace std;
 const int MaxBestandsNaamLengte = 30; // maximale lengte van een bestandsnaam
 
 //*************************************************************************
+
+//Algemene informatie schrijvers van het programma
+void infoblokje() {
+    cout << "AapjeOmino" << endl
+         << "Geschreven door Bart Aaldering (s2969866)," << endl
+         << "student Informatica (Artificial Intelligence) te Leiden" << endl
+         << "en Lex Janssens (s2989344)," << endl
+         << "student Informatica (Artificial Intelligence) te Leiden" << endl
+         << "Inleverdatum: 28-3-2021 23:59" << endl;
+}//info
 
 // Schrijf de zetten in vector zetten met een passende kop naar het scherm.
 void schrijfZetten (string kop, vector<Zet> zetten)
@@ -290,6 +300,7 @@ void hoofdmenu()
 
 int main()
 {
+  infoblokje();
   hoofdmenu();
   return 0;
 }
