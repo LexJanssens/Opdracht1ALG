@@ -21,6 +21,7 @@
 #include "standaard.h"
 #include "zet.h"
 #include "aapjeomino.h"
+#include <thread>
 using namespace std;
 const int MaxBestandsNaamLengte = 30; // maximale lengte van een bestandsnaam
 
@@ -161,79 +162,92 @@ void doeSpel (AapjeOmino *ao1)
 }  // doeSpel
 
 //*************************************************************************
+void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long long int &gStanden)
+{
+   AapjeOmino *ao1;
+	clock_t t1,t2;
+	long long int standen1;
+	Zet besteZet;
+	vector<Zet> zetten;
+
+   ao1 = new AapjeOmino;
+
+   ao1->genereerRandomSpel(7, 7, n, n/4, 3, 3, 1, n);
+
+   t1 = clock ();
+   gScore = ao1->besteScore(besteZet, gStanden);
+   t2 = clock ();
+
+   gTijd += (((double)(t2-t1))/CLOCKS_PER_SEC);
+
+   while (!ao1->eindstand()) {
+      if (ao1->fAanBeurt() == 0) {
+         zetten = ao1->bepaalGoedeZetten(); //speler 1
+         if (zetten.size() == 0) {
+            ao1->haalSteenUitPot();
+            zetten = ao1->bepaalGoedeZetten();
+            if (zetten.size()==0)
+               ao1->wisselSpeler();
+            else
+               ao1->doeZet(zetten[0]);
+         }
+         else
+            ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
+      }
+      else {
+         zetten = ao1->bepaalMogelijkeZetten();
+         if (zetten.size() == 0) {
+            ao1->haalSteenUitPot();
+            zetten = ao1->bepaalMogelijkeZetten();
+            if (zetten.size() == 0)
+               ao1->wisselSpeler();
+            else
+               ao1->doeZet(zetten[0]);
+         }
+         else {
+            besteZet = zetten[0];
+            ao1->besteScore(besteZet, standen1); //speler 2
+            ao1->doeZet(besteZet); //speler 2
+         }
+      }
+   }
+   gEind += ao1->eindscore();
+   cout << i+1 << "/10" << endl;
+   delete ao1;
+
+} //experimenten
 
 // Voert de experimenten uit zoals beschreven in de opdracht.
 void doeExperimenten()
 {
-	AapjeOmino *ao1;
-	int n; //stenen
-	clock_t t1,t2;
-	double gScore, gTijd, gEind;
-	long long int standen, gStanden, standen1;
-	Zet besteZet;
-	vector<Zet> zetten;
+   int n;
 	cout << "Welke N wordt er gebruikt? ";
 	cin >> n;
 	cout << endl;
 
-	for (int i = 0; i < 10; i++) {
-		standen = 0;
-		ao1 = new AapjeOmino;
+	double gScore = 0, gTijd = 0, gEind = 0;
+   long long int gStanden = 0;
+   double tScore = 0, tTijd = 0, tEind = 0;
+   long long int tStanden = 0;
 
-		ao1->genereerRandomSpel(7, 7, n, n/4, 3, 3, 1, n);
+   cout << "N = " << n << endl;
+   for (int i = 0; i < 10; i++) {
+      gScore = 0;
+      gTijd = 0;
+      gEind = 0;
+      gStanden = 0;
 
-		t1 = clock ();
-		gScore = ao1->besteScore(besteZet, standen);
-		t2 = clock ();
-
-		//cout << ((t2-t1)/CLOCKS_PER_SEC) << endl;
-
-		gTijd += (((double)(t2-t1))/CLOCKS_PER_SEC);
-		gStanden += standen;
-		while (!ao1->eindstand()) {
-			if (ao1->fAanBeurt() == 0) {
-				zetten = ao1->bepaalGoedeZetten(); //speler 1
-				if (zetten.size() == 0) {
-					ao1->haalSteenUitPot();
-					zetten = ao1->bepaalGoedeZetten();
-					if (zetten.size()==0)
-						ao1->wisselSpeler();
-					else
-						ao1->doeZet(zetten[0]);
-				}
-				else
-					ao1->doeZet(zetten[randomGetal(0,zetten.size()-1)]);
-			}
-			else {
-				zetten = ao1->bepaalMogelijkeZetten();
-				if (zetten.size() == 0) {
-					ao1->haalSteenUitPot();
-					zetten = ao1->bepaalMogelijkeZetten();
-					if (zetten.size() == 0)
-						ao1->wisselSpeler();
-               else
-						ao1->doeZet(zetten[0]);
-				}
-				else {
-					besteZet = zetten[0];
-					ao1->besteScore(besteZet, standen1); //speler 2
-					ao1->doeZet(besteZet); //speler 2
-				}
-			}
-		}
-		//ao1->drukAf();
-		gEind += ao1->eindscore();
-		cout << i+1 << "/" << 10 << endl;
-		delete ao1;
-	}
-	gTijd /= 10;
-	gScore /= 10;
-	gStanden /= 10;
-	gEind /= 10;
-	cout << "Score: " << gScore << endl;
-	cout << "Standen: " << gStanden << endl;
-	cout << "Tijd: " << gTijd << endl;
-	cout << "Eind: " << gEind << endl;
+      experiment(i, n, gScore, gTijd, gEind, gStanden);
+      tStanden += gStanden;
+      tTijd += gTijd;
+      tScore += gScore;
+      tEind += gEind;
+   }
+   cout << "Gemiddelde tijd: " << tTijd / 10 << endl;
+	cout << "Gemiddelde score: " << tScore / 10 << endl;
+	cout << "Gemiddelde standen: " << tStanden / 10 << endl;
+	cout << "Gemiddelde eindstand: " << tEind / 10 << endl;
+   //cout << "Done" << endl;
 }  // doeExperimenten
 
 //*************************************************************************
@@ -273,7 +287,7 @@ void hoofdmenu()
 }  // hoofdmenu
 
 //*************************************************************************
-  
+
 int main()
 {
   hoofdmenu();
