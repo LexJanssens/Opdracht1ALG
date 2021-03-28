@@ -47,6 +47,9 @@ class AapjeOmino
 	// speler aan beurt) af op het scherm.
 	void drukAf();
 
+	// Drukt mooi de stenen af in de handen van de spelers en de pot
+	void drukSteenAf(vector<int> S);
+
 	// Bepaal alle mogelijke zetten voor de speler die aan de beurt is:
 	// combinaties (steen, rotatie, rij, kolom) die aansluiten bij de stenen
 	// op het bord.
