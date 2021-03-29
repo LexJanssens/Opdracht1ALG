@@ -1,4 +1,12 @@
-// Definitie van klasse AapjeOmino
+// Implementatie van klasse AapjeOmino
+// aapjeomino.h
+// Laatste verandering : 29-3-2021
+// Geschreven door : Bart Aaldering (s2969866) en Lex Janssens (s2989344)
+// Compiler : GNU GCC Compiler
+// Beschrijving :
+/*
+ Declaraties van de functies in aapjeomino.cc
+*/
 
 #ifndef AapjeOminoHVar  // voorkom dat dit bestand meerdere keren
 #define AapjeOminoHVar  // ge-include wordt
@@ -17,8 +25,10 @@ class AapjeOmino
 
 	// returnt wie er aan de beurt is
 	int fAanBeurt();
-
+	
+ 	//geeft de eindscore van de spelende persoon terug
 	int eindscore();
+ 
 	// sorteert de vector A
 	vector<int> sorteer(vector<int> &A);
 
@@ -152,10 +162,10 @@ class AapjeOmino
 	//     de twee handen en de pot
 	// * als niet alle parameters OK zijn, is een eventueel in het object
 	//   aanwezige stand niet veranderd
-
 	bool genereerRandomSpel(int hoogte0, int breedte0,
 			int nrStenen0, int nrStenenInHand0, int rij0, int kolom0,
 			int minGetal, int maxGetal);
+ 
 	private:
 		// in een pair kunnen we een steennummer en een rotatie opslaan
 		// first = nr steen second = rotatie
