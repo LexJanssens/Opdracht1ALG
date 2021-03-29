@@ -1,6 +1,11 @@
 // Hoofdprogramma voor oplossing voor eerste programmeeropdracht Algoritmiek,
 // voorjaar 2021: Aapje Omino.
-//
+
+// main.cc
+// Laatste verandering : 29-3-2021 
+// Geschreven door : Bart Aaldering (s2969866) en Lex Janssens (s2989344)
+// Compiler : GNU GCC Compiler
+// Beschrijving:
 // Biedt de gebruiker een menustructuur om
 // * een instantie van Aapje Omino in te lezen, en daarmee het spel te spelen,
 //   waarbij de gebruiker steeds
@@ -11,8 +16,6 @@
 //     spelers vanaf dit moment optimaal verder spelen
 // * experimenten te doen, waarbij een gretige strategie met een optimale
 //   strategie vergeleken wordt.
-//
-// Naam student 1, naam student 2
 
 #include <iostream>
 #include <string>
@@ -36,6 +39,7 @@ void infoblokje() {
          << "student Informatica (Artificial Intelligence) te Leiden" << endl
          << "Inleverdatum: 29-3-2021 23:59" << endl;
 }//info
+
 // Schrijf de zetten in vector zetten met een passende kop naar het scherm.
 void schrijfZetten (string kop, vector<Zet> zetten)
 { size_t nrZetten;
@@ -171,16 +175,21 @@ void doeSpel (AapjeOmino *ao1)
 }  // doeSpel
 
 //*************************************************************************
+//Doet het daadwerkelijke experiment. Hierin wordt het volgende gemeten:
+//- De besteScore aan het begin van het spel
+//- De tijd die het programma besteed om dat uit te rekenen
+//- De hoeveelheid standen die nodig waren om dat uit te rekenen
+//- De eindscore wanneer Femke 'goede' zetten speelt en Lieke beste zetten.
 void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long long int &gStanden)
 {
-   AapjeOmino *ao1;
-	clock_t t1,t2;
-	long long int standen1;
-	Zet besteZet;
-	vector<Zet> zetten;
+   AapjeOmino *ao1; //voor het spel
+	clock_t t1,t2; //de tijden voor het meten van duur functie
+	long long int standen1; //hoeveelheid standen in de rest van het experiment
+	Zet besteZet; //de beste zet voor besteScore
+	vector<Zet> zetten; //verzameling mogelijke zetten
 
-   ao1 = new AapjeOmino;
-
+   ao1 = new AapjeOmino; 
+	//Genereert een random spel
    ao1->genereerRandomSpel(7, 7, n, n/4, 3, 3, 1, n);
 
    t1 = clock ();
@@ -188,7 +197,10 @@ void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long
    t2 = clock ();
 
    gTijd += (((double)(t2-t1))/CLOCKS_PER_SEC);
-
+	
+	//Speler speelt beste of goede zet,
+	//Wanneer niet mogelijk, steen uit pot (en aanleggen)
+	//Wanneer geen eindstand, wissel speler en herhaal
    while (!ao1->eindstand()) {
       if (ao1->fAanBeurt() == 0) {
          zetten = ao1->bepaalGoedeZetten(); //speler 1
@@ -221,7 +233,7 @@ void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long
       }
    }
    gEind += ao1->eindscore();
-   cout << i+1 << "/10" << endl;
+   cout << i+1 << "/10" << endl; //counter voor hoeveelheid spellen
    delete ao1;
 
 } //experimenten
@@ -229,7 +241,7 @@ void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long
 // Voert de experimenten uit zoals beschreven in de opdracht.
 void doeExperimenten()
 {
-   int n;
+   int n; //hoeveelheid stenen
 	cout << "Welke N wordt er gebruikt? ";
 	cin >> n;
 	cout << endl;
@@ -240,6 +252,7 @@ void doeExperimenten()
    long long int tStanden = 0;
 
    cout << "N = " << n << endl;
+//voert 10x het spel uit
    for (int i = 0; i < 10; i++) {
       gScore = 0;
       gTijd = 0;
@@ -252,11 +265,11 @@ void doeExperimenten()
       tScore += gScore;
       tEind += gEind;
    }
+	//neemt alle gemiddeldes van die spellen
    cout << "Gemiddelde tijd: " << tTijd / 10 << endl;
 	cout << "Gemiddelde score: " << tScore / 10 << endl;
 	cout << "Gemiddelde standen: " << tStanden / 10 << endl;
 	cout << "Gemiddelde eindstand: " << tEind / 10 << endl;
-   //cout << "Done" << endl;
 }  // doeExperimenten
 
 //*************************************************************************
