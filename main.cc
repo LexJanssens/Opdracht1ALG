@@ -21,20 +21,11 @@
 #include "standaard.h"
 #include "zet.h"
 #include "aapjeomino.h"
+
 using namespace std;
 const int MaxBestandsNaamLengte = 30; // maximale lengte van een bestandsnaam
 
 //*************************************************************************
-
-//Algemene informatie schrijvers van het programma
-void infoblokje() {
-    cout << "AapjeOmino" << endl
-         << "Geschreven door Bart Aaldering (s2969866)," << endl
-         << "student Informatica (Artificial Intelligence) te Leiden" << endl
-         << "en Lex Janssens (s2989344)," << endl
-         << "student Informatica (Artificial Intelligence) te Leiden" << endl
-         << "Inleverdatum: 28-3-2021 23:59" << endl;
-}//info
 
 // Schrijf de zetten in vector zetten met een passende kop naar het scherm.
 void schrijfZetten (string kop, vector<Zet> zetten)
@@ -229,69 +220,69 @@ void experiment(int i, int n, double &gScore, double &gTijd, double &gEind, long
 // Voert de experimenten uit zoals beschreven in de opdracht.
 void doeExperimenten()
 {
-   int n;
-	cout << "Welke N wordt er gebruikt? ";
-	cin >> n;
-	cout << endl;
+		
+	int n;
+		cout << "Welke N wordt er gebruikt? ";
+		cin >> n;
+		cout << endl;
 
-	double gScore = 0, gTijd = 0, gEind = 0;
-   long long int gStanden = 0;
-   double tScore = 0, tTijd = 0, tEind = 0;
-   long long int tStanden = 0;
+		double gScore = 0, gTijd = 0, gEind = 0;
+	long long int gStanden = 0;
+	double tScore = 0, tTijd = 0, tEind = 0;
+	long long int tStanden = 0;
 
-   cout << "N = " << n << endl;
-   for (int i = 0; i < 10; i++) {
-      gScore = 0;
-      gTijd = 0;
-      gEind = 0;
-      gStanden = 0;
+	cout << "N = " << n << endl;
+	for (int i = 0; i < 10; i++) {
+		gScore = 0;
+		gTijd = 0;
+		gEind = 0;
+		gStanden = 0;
 
-      experiment(i, n, gScore, gTijd, gEind, gStanden);
-      tStanden += gStanden;
-      tTijd += gTijd;
-      tScore += gScore;
-      tEind += gEind;
-   }
-   cout << "Gemiddelde tijd: " << tTijd / 10 << endl;
+		experiment(i, n, gScore, gTijd, gEind, gStanden);
+		tStanden += gStanden;
+		tTijd += gTijd;
+		tScore += gScore;
+		tEind += gEind;
+	}
+	cout << "Gemiddelde tijd: " << tTijd / 10 << endl;
 	cout << "Gemiddelde score: " << tScore / 10 << endl;
 	cout << "Gemiddelde standen: " << tStanden / 10 << endl;
 	cout << "Gemiddelde eindstand: " << tEind / 10 << endl;
-   //cout << "Done" << endl;
 }  // doeExperimenten
 
 //*************************************************************************
 
 void hoofdmenu()
-{ AapjeOmino *ao1;  // pointer, om makkeijk nieuwe objecten te kunnen maken
-                    // en weer weg te gooien
-  int keuze;
-  char invoernaam[MaxBestandsNaamLengte+1];
+{ 
+	AapjeOmino *ao1;  // pointer, om makkeijk nieuwe objecten te kunnen maken
+					// en weer weg te gooien
+	int keuze;
+	char invoernaam[MaxBestandsNaamLengte+1];
 
-  do
-  {
-    cout << endl;
-    cout << "1. Een spel spelen" << endl;
-    cout << "2. Experimenten doen" << endl;
-    cout << "3. Stoppen" << endl;
-    cout << endl;
-    cout << "Maak een keuze: ";
-    cin >> keuze;
-    switch (keuze)
-    { case 1: ao1 = new AapjeOmino();
-              cout << "Geef de naam van het tekstbestand met het spel: ";
-              cin >> invoernaam;
-              if (ao1 -> leesIn (invoernaam))
-                doeSpel (ao1);
-              delete ao1;  // netjes opruimen
-              break;
-      case 2: doeExperimenten();
-              break;
-      case 3: break;
-      default: cout << endl;
-               cout << "Voer een goede keuze in!" << endl;
-    }
-
-  } while (keuze!=3);
+	do
+	{
+		cout << endl;
+		cout << "1. Een spel spelen" << endl;
+		cout << "2. Experimenten doen" << endl;
+		cout << "3. Stoppen" << endl;
+		cout << endl;
+		cout << "Maak een keuze: ";
+		cin >> keuze;
+		switch (keuze)
+		{ case 1: ao1 = new AapjeOmino();
+					cout << "Geef de naam van het tekstbestand met het spel: ";
+					cin >> invoernaam;
+					if (ao1 -> leesIn (invoernaam))
+					doeSpel (ao1);
+					delete ao1;  // netjes opruimen
+					break;
+			case 2: doeExperimenten();
+					break;
+			case 3: break;
+			default: cout << endl;
+					cout << "Voer een goede keuze in!" << endl;
+		}
+	} while (keuze!=3);
 
 }  // hoofdmenu
 
@@ -299,7 +290,6 @@ void hoofdmenu()
 
 int main()
 {
-  infoblokje();
   hoofdmenu();
   return 0;
 }
