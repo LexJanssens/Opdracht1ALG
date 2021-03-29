@@ -1,7 +1,6 @@
 // Implementatie van klasse AapjeOmino
-// Implementatie van klasse AapjeOmino
 // aapjeomino.cc
-// Laatste verandering : 29-3-2021 16:19
+// Laatste verandering : 29-3-2021 
 // Geschreven door : Bart Aaldering (s2969866) en Lex Janssens (s2989344)
 // Compiler : GNU GCC Compiler
 // Beschrijving :
