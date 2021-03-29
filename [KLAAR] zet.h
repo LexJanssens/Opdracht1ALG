@@ -1,5 +1,12 @@
 // Definitie van klasse Zet
-
+// zet.h
+// Laatste verandering : 29-3-2021
+// Geschreven door : Bart Aaldering (s2969866) en Lex Janssens (s2989344)
+// Compiler : GNU GCC Compiler
+// Beschrijving :
+/*
+ Declaraties van object Zet
+*/
 #ifndef ZetHVar  // voorkom dat dit bestand meerdere keren
 #define ZetHVar  // ge-include wordt
 
