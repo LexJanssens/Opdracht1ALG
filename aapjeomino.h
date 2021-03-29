@@ -113,7 +113,7 @@ class AapjeOmino
 	// Haalt de Zet zet weer weg van het bord. Doe het in de hand van de speler
 	// die nu niet aan de beurt is. Controleer of er zonder die steen zetten
 	// mogelijk waren -> zo niet, doe de steen terug in de pot.
- 	void unDoeZet(Zet zet);
+	void unDoeZet(Zet zet);
 
 	// Bepaal met behulp van brute force de eindscore voor de speler die in
 	// de huidige stand (= de stand van de huidige recursieve aanroep)
@@ -167,9 +167,9 @@ class AapjeOmino
 
 		// Houd de actie bij die het laatst is gedaan
 		int actie = 0; // 0 = speler gewisseld, 1 = steen gelegd & 2 = steen gepakt
-      int niv = 0;   //niveau van de recursie.
+	int niv = 0;   //niveau van de recursie.
 		// bevat de stenen in de hand van Femke en Lieke
-      vector<vector<int>> stenenHand = {{},{}};
+	vector<vector<int>> stenenHand = {{},{}};
 		int pot = 1; // bevat het steen nummer van de eerste volgende steen in de pot
 		int stenen[MaxDimensie*MaxDimensie][4]; // maximale aantal kan hierboven zijn
 };
