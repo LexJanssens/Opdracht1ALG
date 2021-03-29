@@ -1,5 +1,14 @@
 // Implementatie van klasse Zet
-
+// zet.cc
+// Laatste verandering : 29-3-2021 
+// Geschreven door : Bart Aaldering (s2969866) en Lex Janssens (s2989344)
+// Compiler : GNU GCC Compiler
+// Beschrijving :
+/*
+ Hierin staan de functies bedoeld voor een zet. Waardes zoals het steen-
+ nummer, rotatie en positie worden hierin opgeslagen en worden ook
+ gebruikt bij het controleren van mogelijke zetten.
+*/
 #include "standaard.h"
 #include "zet.h"
 #include <iostream>
@@ -9,9 +18,9 @@ using namespace std;
 
 Zet::Zet ()
 {
-	i = 0;
-	r = 0;
-	rij = 0;
+	i = 0; //steen nr
+	r = 0; //rotatie steen
+	rij = 0; 
 	kolom = 0;
 }  // default constructor
 
@@ -92,7 +101,6 @@ int Zet::getKolom ()
 
 void Zet::drukAf ()
 {
-	
 	cout << "(steen " << i << ", rotatie " << r << ", vakje [" 
 		<< rij << "," << kolom << "])" << endl;
 }  // drukAf
